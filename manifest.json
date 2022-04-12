@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "AutoHide AutoMod",
+  "version": "0.1",
+  "description": "Automatically hides AutoModerator comments in Reddit.",
+  "icons": {
+      "16": "autohide16.png",
+      "48": "autohide48.png",
+      "128": "autohide128.png"
+  },
+  "action": {
+      "default_icon": "autohide16.png",
+      "default_popup": "popup.html"
+  },
+
+  "options_page": "options.html",
+
+  "permissions": [
+      "storage"
+  ]
+}
