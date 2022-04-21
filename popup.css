@@ -1,0 +1,29 @@
+﻿
+.activate {
+    border: none;
+    border-radius: 50%;
+    background-color: transparent;
+    cursor: pointer;
+    user-select: none;
+}
+
+.icon, .activate {
+    display: flex;
+    margin: 0 auto;
+    width: 110px;
+    height: 110px;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    display: none;
+}
+
+#blocklist {
+    width: 40%;
+}
+
+table, th, td {
+    border: 1px solid;
+}

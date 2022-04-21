@@ -1,15 +1,33 @@
 ﻿
 <!DOCTYPE html>
 
-<html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
+        <meta charset="utf-8" />
         <title>AutoHide AutoMod</title>
-        <script src="js\jquery-3.6.0.js"></script>
-        <script src="popup.js"></script>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <script defer src="js\jquery-3.6.0.js"></script>
+        <script defer src="popup.js"></script>
+        <link rel="stylesheet" type="text/css" href="popup.css">
     </head>
     <body>
+        <div>
+            <!--TODO: button is rounded, but corners can still be clicked-->
+            <button type="button" class="activate" id="activate">
+                <img src="img\autohide128.png" alt="Activated" class="icon" draggable="false">
+                <img src="img\grayscale128.png" alt="Unactivated" class="icon hidden" draggable="false">
+            </button>
+        </div>
+        <div>
+            <h2>Blocked users</h2>
+            <ul id="blocklist">
+                <li>user0</li>
+                <li>user1</li>
+                <li>user2</li>
+            </ul>
+        </div>
+        
         <h2 id="greet">Hello World</h2>
         <input type="text" id="name">
+        <button type="submit" id="options">Options</button>
     </body>
 </html>

@@ -4,21 +4,23 @@
     "version": "0.3",
     "description": "Automatically hides AutoModerator comments in Reddit.",
     "icons": {
-        "16": "autohide16.png",
-        "48": "autohide48.png",
-        "128": "autohide128.png"
+        "16": "img/autohide16.png",
+        "48": "img/autohide48.png",
+        "128": "img/autohide128.png"
     },
     "background": {
         "service_worker": "background.js"
     },
     "action": {
-        "default_icon": "autohide16.png",
+        "default_icon": "img/autohide16.png",
         "default_popup": "popup.html"
     },
-    "options_page": "options.html",
+    "options_page": "blocklist.html",
     "permissions": [
         "tabs",
-        "scripting"
+        "scripting",
+        "storage",
+        "contextMenus"
     ],
     "host_permissions": [
         "https://www.reddit.com/r/*/comments/*"

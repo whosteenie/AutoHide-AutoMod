@@ -5,13 +5,16 @@ var blocklist = ["/user/AutoModerator/", "/user/a-mirror-bot/", "/user/DnANZ/"];
 // TODO: implement user settings for block/hide preferences
 var canBlock = false;
 
-comments = document.getElementsByClassName("_1YCqQVO-9r-Up6QPB9H6_4 _1YCqQVO-9r-Up6QPB9H6_4");
-commentsList = comments[0].children;
+var comments = document.getElementsByClassName("_1YCqQVO-9r-Up6QPB9H6_4 _1YCqQVO-9r-Up6QPB9H6_4");
+var commentsList = comments[0].children;
 
-for(let i = 0; i < commentsList.length; i++) {
-    if(isHidden(commentsList[i]) && canBlock) {
-        commentsList[i].remove();
-        i--;
+blockUsers()
+
+function blockUsers() {
+    for(let i = 0; i < commentsList.length; i++) {
+        if(isHidden(commentsList[i]) && canBlock) {
+            commentsList[i].style.display = "none";
+        }
     }
 }
 

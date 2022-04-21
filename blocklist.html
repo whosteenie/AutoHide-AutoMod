@@ -1,0 +1,93 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>AutoHide AutoMod — Blocklist</title>
+    <script defer src="blocklist.js"></script>
+    <link rel="stylesheet" type="text/css" href="blocklist.css">
+</head>
+    <body>
+        <div>
+            <img src="img\autohide128.png" alt="AHAM" id="logo" draggable="false">
+            <h1>AutoHide AutoMod</h1>
+            <p class="page">
+                <a href="chrome-extension://ngoaackofcidlkifepflfpibajaddpae/blocklist.html">Blocklist</a>
+            </p>
+        </div>
+        <div>
+            <div>
+                <h2>Blocklist</h2>
+                <input type="text" id="filter" placeholder="Filter blocklist...">
+            </div>
+            <div>
+                <h3>
+                    Edit Selected / All
+                    <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
+                    <label class="toggle">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                    <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
+                </h3>
+                <table id="blocklist">
+                    <tr id="titles">
+                        <th>
+                            <input type="checkbox" id="select-all" name="block">
+                        </th>
+                        <th>
+                            /user/name/
+                        </th>
+                        <th>
+                            Status: Hidden / Blocked
+                        </th>
+                    </tr>
+                    <tr id="user0">
+                        <td><input type="checkbox" class="select" name="block"></td>
+                        <td class="user">/user/AutoModerator/</td>
+                        <td>
+                            <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
+                            <label class="toggle">
+                                <input type="checkbox" class="toggle">
+                                <span class="slider"></span>
+                            </label>
+                            <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
+                        </td>
+                    </tr>
+                    <tr id="user1">
+                        <td><input type="checkbox" class="select" name="block"></td>
+                        <td class="user">/user/a-mirror-bot/</td>
+                        <td>
+                            <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
+                            <label class="toggle">
+                                <input type="checkbox" class="toggle">
+                                <span class="slider"></span>
+                            </label>
+                            <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
+                        </td>
+                    </tr>
+                    <tr id="user2">
+                        <td><input type="checkbox" class="select" name="block"></td>
+                        <td class="user">/user/DnANZ/</td>
+                        <td>
+                            <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
+                            <label class="toggle">
+                                <input type="checkbox" class="toggle">
+                                <span class="slider"></span>
+                            </label>
+                            <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div id="input">
+            <input type="text" id="blockRule">
+            <button type="submit" id="add">Add</button>
+            <button type="submit" id="remove">Remove</button>
+            <button type="submit" id="save">Save</button>
+            <p id="alert"></p>
+        </div>
+    </body>
+</html>
