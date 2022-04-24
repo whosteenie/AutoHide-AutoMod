@@ -1,35 +1,69 @@
 ﻿
+body {
+    margin: 0;
+}
+
+#top-menu {
+    background-color: darkgray;
+    padding: 10px;
+}
+
+#content {
+    background-color: #F6A9A9;
+    padding: 10px;
+    padding-left: 20px;
+}
+
 #logo {
     padding: 10px;
     padding-right: 15px;
 }
 
 h1 {
-    vertical-align: middle;
     display: inline;
+    vertical-align: middle;
     font-size: 40px;
+    white-space: nowrap;
 }
 
 h2 {
-    vertical-align: middle;
     display: inline;
+    vertical-align: middle;
     padding: 10px;
     font-size: 25px;
 }
 
+#group-edit {
+    display: inline-block;
+    margin: 20px 15px;
+    width: 90px;
+}
+
 .page {
-    font-size: 20px;
+    vertical-align: middle;
     padding-left: 20px;
+    font-size: 20px;
 }
 
 #blocklist {
-    width: 45%;
+    width: 90%;
     min-width: max-content;
+    max-width: 600px;
 }
 
+/*filtering list needs to modify color rule*/
+tr:nth-child(2n - 1) {
+    background-color: #C4C4C4;
+}
+
+tr:nth-child(2n) {
+    background-color: #E6E6E6;
+}
+/**/
+
 #filter {
-    vertical-align: middle;
     display: inline;
+    vertical-align: middle;
     line-height: 2;
 }
 
@@ -42,17 +76,29 @@ h2 {
     margin-top: 5px;
 }
 
-table, th, td {
-    border: 1px solid;
+#headers {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+tr:not(#headers) {
+    height: 50px;
 }
 
 td {
     text-align: center;
 }
 
+button, .select, #select-all, th {
+    cursor: pointer;
+}
+
 img {
     vertical-align: middle;
     user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
 }
 
 .status {
@@ -86,9 +132,7 @@ img {
     left: 0;
     right: 0;
     transition: .2s;
-    -webkit-transition: .2s;
     border-radius: 34px;
-    /*background-color: #ccc;*/
     background-color: #2196F3;
     cursor: pointer;
 }
@@ -102,7 +146,6 @@ img {
     width: 26px;
     height: 26px;
     transition: .2s;
-    -webkit-transition: .2s;
     border-radius: 50%;
     background-color: white;
 }
@@ -110,18 +153,14 @@ img {
 /* slider outer oval checked color */
 input:checked + .slider {
     background-color: #F32C21;
-    /*background-color: #2196F3;*/
 }
 
 /* slider outer oval focus outline */
 input:focus + .slider {
     box-shadow: 0 0 1px #F32C21;
-    /*background-color: #2196F3;*/
 }
 
 /* slider inner circle translation */
 input:checked + .slider:before {
     transform: translateX(26px);
-    -webkit-transform: translateX(26px);
-    -ms-transform: translateX(26px);
 }

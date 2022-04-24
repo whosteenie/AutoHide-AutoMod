@@ -17,10 +17,12 @@ chrome.tabs.onActivated.addListener(
         {
             if(/^https:\/\/www\.reddit\.com\/r\/.*\/comments\/.*/.test(current_tab_info.url))
             {
-                chrome.scripting.executeScript({ target: { tabId: tab.tabId }, files: ["foreground.js"] });
+                chrome.scripting.executeScript({ target: { tabId: tab.tabId }, files: ["js/foreground.js"] });
             }
         });
     });
+
+
 
 // TODO: add blocklist context menu item
 /*
