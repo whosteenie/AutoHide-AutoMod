@@ -169,7 +169,7 @@ function filterList() {
 
     for(let i = 0; i < userlist.length; i++) {
         if(userlist[i].innerHTML.toUpperCase().indexOf(input) > -1) {
-            blocklist[i].style.display = "";
+            blocklist[i].removeAttribute("style");
         } else {
             blocklist[i].style.display = "none";
         }

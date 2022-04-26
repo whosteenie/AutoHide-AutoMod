@@ -24,6 +24,8 @@ function blockUsers(user, status) {
     for(let i = 0; i < commentsList.length; i++) {
         if(isHidden(commentsList[i], user) && status) {
             commentsList[i].style.display = "none";
+        } else {
+            commentsList[i].removeAttribute("style");
         }
     }
 }
@@ -33,7 +35,7 @@ function isHidden(comment, user) {
         let level = comment.getElementsByClassName("_1RIl585IYPW6cmNXwgRz0J")[0].innerHTML;
         level = parseInt(level.replace(/^\D+/g, ""), 10) - 1;
 
-        let threadlines = comment.querySelectorAll("[class='threadline']");
+        let threadlines = comment.querySelectorAll(".threadline");
         threadlines[level]?.click();
 
         pageBlocked++;

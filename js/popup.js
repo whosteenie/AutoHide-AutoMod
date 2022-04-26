@@ -14,5 +14,10 @@ function toggleActivate() {
 document.getElementById("options").addEventListener("click", openOptions);
 
 function openOptions() {
-    window.open("chrome-extension://ngoaackofcidlkifepflfpibajaddpae/blocklist.html");
+    window.open("/blocklist.html");
+}
+
+// TODO: load blocked users on this page
+function loadSettings() {
+
 }
