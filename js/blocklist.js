@@ -1,6 +1,5 @@
 
 const filter = document.getElementById("filter");
-var groupSelect = document.getElementById("select-all");
 const groupStatus = document.getElementById("group-status");
 const table = document.getElementById("blocklist");
 const userlist = document.getElementsByClassName("user");
@@ -8,9 +7,11 @@ const blockRule = document.getElementById("block-rule");
 const warning = document.getElementById("alert");
 let checks = document.getElementsByClassName("select");
 let toggles = document.querySelectorAll("input.toggle");
+let groupSelect = document.getElementById("select-all");
 let currSort = "time";
 
 document.addEventListener("DOMContentLoaded", loadSettings);
+window.addEventListener("resize", hideElements);
 
 filter.addEventListener("keyup", filterList);
 groupStatus.addEventListener("click", toggleSelected);
@@ -44,7 +45,7 @@ async function checkUser(testName) {
 
     let response = await fetch(url);
     let data = await response.text();
-    console.log(data);
+    //console.log(data);
 }
 
 function validateInput() {
@@ -65,18 +66,23 @@ function validateInput() {
     }
 
     for(let i = 0; i < userlist.length; i++) {
-        if(userName === userlist[i].innerHTML) {
+        if(userName.toUpperCase() === userlist[i].innerHTML.toUpperCase()) {
             warning.innerHTML = "Unable to add duplicate user";
             return;
         }
     }
-    
+
     addBlock(userName);
 }
 
 function addBlock(userName) {
     let tablebody = table.querySelector("tbody");
     const index = table.rows.length - 1;
+
+    const statuses = [];
+    for(let i = 0; i < toggles.length; i++) {
+        statuses.push(toggles[i].checked);
+    }
 
     let template = `
                 <tr id="user${index}">
@@ -94,13 +100,19 @@ function addBlock(userName) {
                     </td>
                 </tr>
                     `;
-    
+
     tablebody.innerHTML += template;
 
     blockRule.value = "";
     filter.value = "";
     filterList("");
     addInputs();
+
+    for(let i = 0; i < toggles.length; i++) {
+        toggles[i].checked = statuses[i];
+    }
+
+    toggles[toggles.length - 1].checked = groupStatus.checked;
 }
 
 // TODO: this is required mostly because adding a row as a template
@@ -147,49 +159,6 @@ function removeBlock() {
 
     warning.innerHTML = "";
     groupSelect.checked = false;
-}
-
-// TODO: placeholder until Promises are learned
-function loadSettings() {
-    alert("loaded");
-
-    let blocklist = [];
-
-    for(let i = 0; i < 3; i++) {
-        blocklist.push(chrome.storage.sync.get("user" + i));
-    }
-
-    console.log(blocklist);
-    console.log(blocklist[0]);
-}
-
-function saveSettings() {
-    let blockstatuses = document.querySelectorAll("input[class='toggle']");
-
-    let users = [];
-    let statuses = [];
-
-    for(let i = 0; i < userlist.length; i++) {
-        users.push(userlist[i].innerHTML);
-        statuses.push(blockstatuses[i].checked);
-    }
-
-    let blocklist = [];
-
-    for(let i = 0; i < userlist.length; i++) {
-        blocklist.push({
-            "user": users[i],
-            "status": statuses[i]
-        });
-    }
-
-    for(let i = 0; i < userlist.length; i++) {
-        let key = "user" + i;
-        chrome.storage.sync.set({ [key]: blocklist[i] });
-    }
-
-    warning.style.color = "green";
-    warning.innerHTML = "Saved settings";
 }
 
 // TODO: select-all on a filtered list will select hidden entries
@@ -292,5 +261,73 @@ function sortTable() {
     } else if(this === document.getElementById("head-status")) {
         currSort = "status";
         console.log(currSort + "[0]: " + statusCol[0].querySelector("input").checked);
+    }
+}
+
+function updateSettings(result) {
+    let users = document.querySelectorAll("[id^='user']");
+    let key = "user" + users.length;
+
+    addBlock(result[key].user);
+}
+
+function loadSettings() {
+    chrome.storage.sync.get(["entries"], function (result) {
+        for(let i = 0; i < result.entries; i++) {
+            let key = "user" + i;
+
+            chrome.storage.sync.get([key], function (result) {
+                updateSettings(result);
+                toggles[i].checked = result[key].status;
+            });
+        }
+    });
+}
+
+function saveSettings() {
+    chrome.storage.sync.clear();
+
+    let users = [];
+    let statuses = [];
+
+    for(let i = 0; i < userlist.length; i++) {
+        users.push(userlist[i].innerHTML);
+        statuses.push(toggles[i].checked);
+    }
+
+    let blocklist = [];
+
+    for(let i = 0; i < userlist.length; i++) {
+        blocklist.push({
+            "user": users[i],
+            "status": statuses[i]
+        });
+    }
+
+    let countEntries = 0;
+
+    for(let i = 0; i < userlist.length; i++) {
+        let key = "user" + i;
+
+        let entry = { [key]: blocklist[i] };
+
+        chrome.storage.sync.set(entry)
+        countEntries++;
+    }
+
+    chrome.storage.sync.set({ entries: countEntries });
+
+    warning.style.color = "green";
+    warning.innerHTML = "Saved settings";
+}
+
+function hideElements() {
+    let pageTitle = document.getElementsByTagName("h1")[0];
+    let statusIcons = document.getElementsByClassName("status");
+
+    if(window.innerWidth < 832) {
+        pageTitle.className = "hidden";
+    } else {
+        pageTitle.classList.remove("hidden");
     }
 }

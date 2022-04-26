@@ -8,86 +8,55 @@
     <script defer src="js\blocklist.js"></script>
     <link rel="stylesheet" type="text/css" href="css\blocklist.css">
 </head>
-    <body>
-        <div id="top-menu">
-            <img src="img\autohide128.png" alt="AHAM" id="logo" draggable="false">
-            <h1>AutoHide AutoMod</h1>
-            <a href="chrome-extension://ngoaackofcidlkifepflfpibajaddpae/blocklist.html" class="page">Blocklist</a>
-        </div>
-        <div id="content">
+<body>
+    <div id="top-menu">
+        <img src="img\autohide128.png" alt="AHAM" id="logo" draggable="false">
+        <h1>AutoHide AutoMod</h1>
+        <a href="chrome-extension://ngoaackofcidlkifepflfpibajaddpae/blocklist.html" class="page">Blocklist</a>
+        <a href="chrome-extension://ngoaackofcidlkifepflfpibajaddpae/options.html" class="page">Options</a>
+        <a href="chrome-extension://ngoaackofcidlkifepflfpibajaddpae/about.html" class="page">About</a>
+    </div>
+    <div id="content">
+        <div>
             <div>
                 <div>
-                    <div class="test">
-                        <h2>Blocklist</h2>
-                        <input type="text" id="filter" placeholder="Filter blocklist...">
-                        <h3 id="group-edit">Edit Selected</h3>
-                        <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
-                        <label class="toggle">
-                            <input type="checkbox" id="group-status">
-                            <span class="slider"></span>
-                        </label>
-                        <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
-                    </div>
-                </div>
-                <div>
-                    <table id="blocklist">
-                        <tr id="headers">
-                            <th id="head-check">
-                                <input type="checkbox" id="select-all">
-                            </th>
-                            <th id="head-user">
-                                /user/name/
-                            </th>
-                            <th id="head-status">
-                                Status: Hidden / Blocked
-                            </th>
-                        </tr>
-                        <tr id="user0">
-                            <td><input type="checkbox" class="select"></td>
-                            <td class="user">/user/AutoModerator/</td>
-                            <td>
-                                <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
-                                <label class="toggle">
-                                    <input type="checkbox" class="toggle">
-                                    <span class="slider"></span>
-                                </label>
-                                <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
-                            </td>
-                        </tr>
-                        <tr id="user1">
-                            <td><input type="checkbox" class="select"></td>
-                            <td class="user">/user/a-mirror-bot/</td>
-                            <td>
-                                <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
-                                <label class="toggle">
-                                    <input type="checkbox" class="toggle">
-                                    <span class="slider"></span>
-                                </label>
-                                <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
-                            </td>
-                        </tr>
-                        <tr id="user2">
-                            <td><input type="checkbox" class="select"></td>
-                            <td class="user">/user/DnANZ/</td>
-                            <td>
-                                <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
-                                <label class="toggle">
-                                    <input type="checkbox" class="toggle">
-                                    <span class="slider"></span>
-                                </label>
-                                <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
-                            </td>
-                        </tr>
-                    </table>
+                    <h2>Blocklist</h2>
+                    <input type="text" id="filter" placeholder="Filter blocklist...">
+                    <h3 id="group-edit">Edit Selected</h3>
+                    <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
+                    <label class="toggle">
+                        <input type="checkbox" id="group-status">
+                        <span class="slider"></span>
+                    </label>
+                    <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
                 </div>
             </div>
-            <div id="input">
-                <input type="text" id="block-rule" placeholder="Add user...">
-                <button type="submit" id="add">Add</button>
-                <button type="submit" id="remove">Remove</button>
-                <button type="submit" id="save">Save</button>
-                <p id="alert"></p>
+            <div>
+                <table id="blocklist">
+                    <tr id="headers">
+                        <th id="head-check">
+                            <input type="checkbox" id="select-all">
+                        </th>
+                        <th id="head-user">
+                            /user/name/
+                        </th>
+                        <th id="head-status">
+                            Status: Hidden / Blocked
+                        </th>
+                    </tr>
+                </table>
             </div>
         </div>
-    </body>
+        <div id="input">
+            <input type="text" id="block-rule" placeholder="Add user...">
+            <button type="submit" id="add">Add</button>
+            <button type="submit" id="remove">Remove</button>
+            <button type="submit" id="save">Save</button>
+            <form href="chrome-extension://ngoaackofcidlkifepflfpibajaddpae/blocklist.html" id="cancel">
+                <button type="submit">Cancel</button>
+            </form>
+            <p id="alert"></p>
+        </div>
+    </div>
+</body>
 </html>

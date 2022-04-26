@@ -1,21 +1,23 @@
 ﻿
 body {
+    display: flex;
+    flex-flow: column;
     margin: 0;
+    background-color: #F6A9A9;
+    align-items: center;
+    height: 100vh;
 }
 
 #top-menu {
     background-color: darkgray;
-    padding: 10px;
-}
-
-#content {
-    background-color: #F6A9A9;
-    padding: 10px;
-    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 100%
 }
 
 #logo {
     padding: 10px;
+    padding-left: 20px;
     padding-right: 15px;
 }
 
@@ -24,6 +26,29 @@ h1 {
     vertical-align: middle;
     font-size: 40px;
     white-space: nowrap;
+}
+
+.page {
+    vertical-align: middle;
+    padding-left: 20px;
+    font-size: 20px;
+}
+
+img {
+    vertical-align: middle;
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+#content {
+    display: flex;
+    flex-flow: column;
+    background-color: lightblue;
+    width: 700px;
+    height: 100vh;
+    align-items: center;
+    padding-bottom: 30px;
 }
 
 h2 {
@@ -39,19 +64,17 @@ h2 {
     width: 90px;
 }
 
-.page {
-    vertical-align: middle;
-    padding-left: 20px;
-    font-size: 20px;
+.hidden {
+    display: none;
 }
 
 #blocklist {
-    width: 90%;
+    width: 600px;
     min-width: max-content;
-    max-width: 600px;
 }
 
-/*filtering list needs to modify color rule*/
+/* filtering list needs to modify color rule */
+/* might need to do this through js, css doesn't program! */
 tr:nth-child(2n - 1) {
     background-color: #C4C4C4;
 }
@@ -59,7 +82,8 @@ tr:nth-child(2n - 1) {
 tr:nth-child(2n) {
     background-color: #E6E6E6;
 }
-/**/
+
+/* ------------------------------------------------ */
 
 #filter {
     display: inline;
@@ -86,6 +110,14 @@ tr:not(#headers) {
     height: 50px;
 }
 
+#head-check {
+    width: 55px;
+}
+
+#head-status {
+    width: 215px;
+}
+
 td {
     text-align: center;
 }
@@ -94,16 +126,13 @@ button, .select, #select-all, th {
     cursor: pointer;
 }
 
-img {
-    vertical-align: middle;
-    user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-}
-
 .status {
     width: 30px;
     height: 30px;
+}
+
+#cancel {
+    display: inline-block;
 }
 
 /* <-- Slider button --> */
