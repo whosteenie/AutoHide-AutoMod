@@ -1,6 +1,6 @@
 # ![alt text](https://github.com/whosteenie/AutoHide-AutoMod/blob/master/img/autohide48.png?raw=true) AutoHide-AutoMod
 
-<h1 text-align="center">
+<h1 align="center">
   <img src="https://github.com/whosteenie/AutoHide-AutoMod/blob/master/img/autohide48.png?raw=true"> AutoHide-AutoMod
 </h1>
 
