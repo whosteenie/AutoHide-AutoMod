@@ -1,6 +1,4 @@
-# <p align="center">
-    ![alt text](https://github.com/whosteenie/AutoHide-AutoMod/blob/master/img/autohide48.png?raw=true) AutoHide-AutoMod
-</p>
+# ![alt text](https://github.com/whosteenie/AutoHide-AutoMod/blob/master/img/autohide48.png?raw=true) AutoHide-AutoMod
 
 Automatically hides AutoModerator comments in Reddit, with modular blocklist.
 
