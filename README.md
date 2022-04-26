@@ -1,4 +1,4 @@
-<h1 align="center">
+<h1 align="center" line-height="50px">
   <img align="center" src="https://github.com/whosteenie/AutoHide-AutoMod/blob/master/img/autohide48.png?raw=true"> AutoHide-AutoMod
 </h1>
 
