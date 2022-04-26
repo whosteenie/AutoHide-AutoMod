@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img align="center"  src="https://github.com/whosteenie/AutoHide-AutoMod/blob/master/img/autohide128.png?raw=true"> AutoHide-AutoMod
+  <img align="center" width="70" height="70" src="https://github.com/whosteenie/AutoHide-AutoMod/blob/master/img/autohide128.png?raw=true"> AutoHide-AutoMod
 </h1>
 
 Automatically hides AutoModerator comments in Reddit, with modular blocklist.
