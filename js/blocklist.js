@@ -1,16 +1,29 @@
 
+/* --- Style --- */
+let body = document.getElementsByTagName("body")[0];
+let topMenu = document.getElementById("top-menu");
+let content = document.getElementById("content");
+/* ------------- */
+
 const filter = document.getElementById("filter");
 const groupStatus = document.getElementById("group-status");
 const table = document.getElementById("blocklist");
 const userlist = document.getElementsByClassName("user");
 const blockRule = document.getElementById("block-rule");
-const warning = document.getElementById("alert");
+const warning = document.getElementById("warning");
 let checks = document.getElementsByClassName("select");
 let toggles = document.querySelectorAll("input.toggle");
 let groupSelect = document.getElementById("select-all");
 let currSort = "time";
 
 document.addEventListener("DOMContentLoaded", loadSettings);
+document.addEventListener('keydown', e => {
+    if(e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        saveSettings();
+    }
+});
+
 window.addEventListener("resize", hideElements);
 
 filter.addEventListener("keyup", filterList);
@@ -48,17 +61,21 @@ async function checkUser(testName) {
     //console.log(data);
 }
 
-function validateInput() {
+async function validateInput() {
     warning.innerHTML = "";
     warning.style.color = "red";
 
-    const regexp = /^\/?(?:(?:user|u)\/)?([\w-]{3,20})\/?$/;
+    const regexp = /^(?:https:\/\/)?(?:www\.)?(?:reddit\.com)?\/?\/?(?:(?:user|u)\/)?([\w-]{3,20})\/?$/;
     let input = blockRule.value;
     let userName = "";
 
+    let url = "https://www.reddit.com/api/username_available.json?user=" + input;
+    let response = await fetch(url);
+    let exists = !(await response.text() === "true");
+
     let isValid = regexp.test(input);
 
-    if(isValid) {
+    if(isValid && exists) {
         userName = "/user/" + regexp.exec(input)[1] + "/";
     } else {
         warning.innerHTML = "Please input a valid user";
@@ -86,11 +103,11 @@ function addBlock(userName) {
 
     let template = `
                 <tr id="user${index}">
-                    <td>
+                    <td class="no-select">
                         <input type="checkbox" class="select">
                     </td>
                     <td class="user">${userName}</td>
-                    <td>
+                    <td class="no-select">
                         <img src="img/expand.png" alt="Hidden" class="status" draggable="false">
                         <label class="toggle">
                             <input type="checkbox" class="toggle">
@@ -233,7 +250,7 @@ function updateSelect() {
         }
     }
 
-    if(countBlocked !== countHidden) {
+    if(countBlocked !== countHidden && countHidden > 1 || countBlocked > 1) {
         groupStatus.checked = countBlocked > countHidden;
     }
 }
@@ -272,62 +289,55 @@ function updateSettings(result) {
 }
 
 function loadSettings() {
-    chrome.storage.sync.get(["entries"], function (result) {
-        for(let i = 0; i < result.entries; i++) {
-            let key = "user" + i;
+	chrome.storage.sync.get(["userlist"], function (result) {
+		for(let i = 0; i < result.userlist.length; i++) {
+			let key = "user" + i;
+			addBlock(result.userlist[i][key].user)
+			toggles[i].checked = result.userlist[i][key].status;
+		}
+	});
 
-            chrome.storage.sync.get([key], function (result) {
-                updateSettings(result);
-                toggles[i].checked = result[key].status;
-            });
-        }
-    });
+	chrome.storage.sync.get("style", function (result) {
+		body.classList.add(result["style"]);
+		topMenu.classList.add(result["style"]);
+		content.classList.add(result["style"]);
+	});
 }
 
 function saveSettings() {
-    chrome.storage.sync.clear();
-
-    let users = [];
-    let statuses = [];
-
-    for(let i = 0; i < userlist.length; i++) {
-        users.push(userlist[i].innerHTML);
-        statuses.push(toggles[i].checked);
-    }
+	chrome.storage.sync.remove("userlist");
 
     let blocklist = [];
 
-    for(let i = 0; i < userlist.length; i++) {
-        blocklist.push({
-            "user": users[i],
-            "status": statuses[i]
-        });
-    }
+	for(let i = 0; i < userlist.length; i++) {
+		let data = {
+			"user": userlist[i].innerHTML,
+			"status": toggles[i].checked
+		};
 
-    let countEntries = 0;
+		let key = "user" + i;
 
-    for(let i = 0; i < userlist.length; i++) {
-        let key = "user" + i;
+		blocklist.push({ [key]: data });
+	}
 
-        let entry = { [key]: blocklist[i] };
-
-        chrome.storage.sync.set(entry)
-        countEntries++;
-    }
-
-    chrome.storage.sync.set({ entries: countEntries });
+	let entry = { ["userlist"]: blocklist };
+	chrome.storage.sync.set(entry);
 
     warning.style.color = "green";
     warning.innerHTML = "Saved settings";
 }
 
 function hideElements() {
-    let pageTitle = document.getElementsByTagName("h1")[0];
-    let statusIcons = document.getElementsByClassName("status");
+	let pageTitle = document.getElementsByTagName("h1")[0];
 
-    if(window.innerWidth < 832) {
-        pageTitle.className = "hidden";
-    } else {
-        pageTitle.classList.remove("hidden");
-    }
+	if(window.innerWidth < 1000) {
+		content.classList.add("fixed");
+	} else {
+		content.classList.remove("fixed");
+	}
+	if(window.innerWidth < 832) {
+		pageTitle.classList.add("hidden");
+	} else {
+		pageTitle.classList.remove("hidden");
+	}
 }

@@ -2,15 +2,13 @@
 var contextMenuHide = {
     "id": "hide",
     "title": "Add to hidden",
-    "contexts": ["link"],
-    "onclick": customBlock()
+    "contexts": ["link"]
 };
 
 var contextMenuBlock = {
     "id": "block",
     "title": "Add to blocked",
-    "contexts": ["link"],
-    "onclick": customBlock()
+    "contexts": ["link"]
 };
 
 // TEMP: readability
@@ -24,14 +22,17 @@ chrome.tabs.onActivated.addListener(
                 chrome.contextMenus.create(contextMenuHide);
                 chrome.contextMenus.create(contextMenuBlock);
             } else {
-                chrome.contextMenus.remove("hide");
-                chrome.contextMenus.remove("block");
+                //chrome.contextMenus?.remove("hide");
+                //chrome.contextMenus?.remove("block");
+                chrome.contextMenus.removeAll();
             }
         });
     });
 
-// TODO: add blocklist context menu item
-
 function customBlock() {
     console.log("add blockrule");
+}
+
+function customHide() {
+    console.log("add hiderule");
 }

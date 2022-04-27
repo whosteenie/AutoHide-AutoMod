@@ -1,18 +1,28 @@
 ﻿
+/* <------------------------------ blocklist ------------------------------> */
+
 body {
     display: flex;
     flex-flow: column;
     margin: 0;
-    background-color: #F6A9A9;
     align-items: center;
+	width: 100vw;
     height: 100vh;
 }
 
 #top-menu {
-    background-color: darkgray;
     padding-top: 10px;
     padding-bottom: 10px;
     width: 100%
+}
+
+#content {
+    display: flex;
+    flex-flow: column;
+    width: 1000px;
+    height: 100vh;
+    align-items: center;
+    padding-bottom: 30px;
 }
 
 #logo {
@@ -41,21 +51,15 @@ img {
     -ms-user-select: none;
 }
 
-#content {
-    display: flex;
-    flex-flow: column;
-    background-color: lightblue;
-    width: 700px;
-    height: 100vh;
-    align-items: center;
-    padding-bottom: 30px;
-}
-
 h2 {
     display: inline;
     vertical-align: middle;
     padding: 10px;
     font-size: 25px;
+}
+
+#table-title {
+    margin-top: 10px;
 }
 
 #group-edit {
@@ -64,26 +68,10 @@ h2 {
     width: 90px;
 }
 
-.hidden {
-    display: none;
-}
-
 #blocklist {
     width: 600px;
     min-width: max-content;
 }
-
-/* filtering list needs to modify color rule */
-/* might need to do this through js, css doesn't program! */
-tr:nth-child(2n - 1) {
-    background-color: #C4C4C4;
-}
-
-tr:nth-child(2n) {
-    background-color: #E6E6E6;
-}
-
-/* ------------------------------------------------ */
 
 #filter {
     display: inline;
@@ -95,12 +83,18 @@ tr:nth-child(2n) {
     margin-top: 10px;
 }
 
-#alert {
+#warning {
     color: red;
     margin-top: 5px;
 }
 
 #headers {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.no-select {
     user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -135,7 +129,28 @@ button, .select, #select-all, th {
     display: inline-block;
 }
 
-/* <-- Slider button --> */
+.hidden {
+    display: none;
+}
+
+.fixed {
+    width: 100vw !important;
+}
+
+a {
+    color: #2525EA;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #531B8D;
+}
+
+a:active {
+    color: red;
+}
+
+/* <----------------- Slider button -----------------> */
 
 /* slider outer oval */
 .toggle {
@@ -193,3 +208,94 @@ input:focus + .slider {
 input:checked + .slider:before {
     transform: translateX(26px);
 }
+
+/* <----------------- Slider button -----------------> */
+
+/* <---------------------------- blocklist end ----------------------------> */
+
+/* <------------------------------- options -------------------------------> */
+
+.options {
+	vertical-align: middle;
+}
+
+/* <----------------------------- options end -----------------------------> */
+
+/* <-------------------------------- about --------------------------------> */
+
+#github {
+    margin-right: 25px;
+}
+
+#twitter {
+    margin-left: 25px;
+}
+
+.contact {
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    margin-top: 10px;
+}
+
+.link-image {
+    line-height: 0;
+    font-size: 0;
+    color: transparent;
+}
+
+/* <------------------------------ about end ------------------------------> */
+
+/* ------------- WEBPAGE GLOBAL STYLE ------------- */
+
+/* --- light mode ---*/
+#top-menu.style-light {
+	background-color: #9C9C9C;
+}
+
+body.style-light {
+	background-color: #ABABAB;
+}
+
+#content.style-light {
+	background-color: #EDEDED;
+}
+
+/* --- dark mode ---*/
+#top-menu.style-dark {
+	background-color: #3F3F3F;
+}
+
+body.style-dark {
+	background-color: #606060;
+}
+
+#content.style-dark {
+	background-color: #7D7D7D;
+}
+
+/* --- classic mode --- */
+#top-menu.style-classic {
+	background-color: darkgray;;
+}
+
+body.style-classic {
+	background-color: #F6A9A9;
+}
+
+#content.style-classic {
+	background-color: lightblue;
+}
+
+/* --- blocklist colors --- */
+/* filtering list needs to modify color rule */
+/* might need to do this through js, css doesn't program! */
+tr:nth-child(2n - 1) {
+    background-color: #A3A3A3;
+}
+
+tr:nth-child(2n) {
+    background-color: #CDCDCD;
+}
+
+/* ------------------------------------------------ */

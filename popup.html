@@ -1,7 +1,7 @@
 ﻿
 <!DOCTYPE html>
 
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<html id="popup-html" lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <title>AutoHide AutoMod</title>
@@ -11,23 +11,23 @@
 <body>
     <div>
         <button type="button" class="activate" id="activate">
-            <img src="img\autohide128.png" alt="Enabled" class="icon" title="Click to disable" draggable="false">
-            <img src="img\grayscale128.png" alt="Disabled" class="icon hidden" title="Click to enable" draggable="false">
+            <img src="img\autohide128.png" alt="Enabled" class="icon" id="enabled" title="Click to disable" draggable="false">
+            <img src="img\grayscale128.png" alt="Disabled" class="icon hidden" id="disabled" title="Click to enable" draggable="false">
         </button>
     </div>
-    <div>
-        <h2>Blocked users</h2>
+    <div id="popup-content">
+        <h2 id="popup-h2">Blocked users</h2>
         <table>
             <tr>
-                <td><img src="img\blocked.png" alt="•" class="status"></td>
+                <td><img src="img\blocked.png" alt="•" class="popup-status"></td>
                 <td>/user/AutoModerator/</td>
             </tr>
             <tr>
-                <td><img src="img\blocked.png" alt="•" class="status"></td>
+                <td><img src="img\blocked.png" alt="•" class="popup-status"></td>
                 <td>/user/a-mirror-bot/</td>
             </tr>
             <tr>
-                <td><img src="img\expand.png" alt="•" class="status"></td>
+                <td><img src="img\expand.png" alt="•" class="popup-status"></td>
                 <td>/user/DnANZ/</td>
             </tr>
         </table>

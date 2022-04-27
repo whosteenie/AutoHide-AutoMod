@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <title>AutoHide AutoMod — Blocklist</title>
     <script defer src="js\blocklist.js"></script>
-    <link rel="stylesheet" type="text/css" href="css\blocklist.css">
+    <link rel="stylesheet" type="text/css" href="css\stylesheet.css">
 </head>
 <body>
     <div id="top-menu">
@@ -19,16 +19,18 @@
     <div id="content">
         <div>
             <div>
-                <div>
+                <div class="no-select" id="table-title">
                     <h2>Blocklist</h2>
                     <input type="text" id="filter" placeholder="Filter blocklist...">
                     <h3 id="group-edit">Edit Selected</h3>
-                    <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
-                    <label class="toggle">
-                        <input type="checkbox" id="group-status">
-                        <span class="slider"></span>
-                    </label>
-                    <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
+                    <span class="no-select">
+                        <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
+                        <label class="toggle">
+                            <input type="checkbox" id="group-status">
+                            <span class="slider"></span>
+                        </label>
+                        <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
+                    </span>
                 </div>
             </div>
             <div>
@@ -47,7 +49,7 @@
                 </table>
             </div>
         </div>
-        <div id="input">
+        <div class="no-select" id="input">
             <input type="text" id="block-rule" placeholder="Add user...">
             <button type="submit" id="add">Add</button>
             <button type="submit" id="remove">Remove</button>
@@ -55,7 +57,7 @@
             <form href="/blocklist.html" id="cancel">
                 <button type="submit">Cancel</button>
             </form>
-            <p id="alert"></p>
+            <p id="warning"></p>
         </div>
     </div>
 </body>

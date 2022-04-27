@@ -6,18 +6,21 @@
     <meta charset="utf-8" />
     <title>AutoHide AutoMod — Options</title>
     <script defer src="js\options.js"></script>
-    <link rel="stylesheet" type="text/css" href="css\options.css">
+    <link rel="stylesheet" type="text/css" href="css\stylesheet.css">
 </head>
-<body>
-    <div id="top-menu">
+<body class="style-light">
+    <div class="style-light" id="top-menu">
         <img src="img\autohide128.png" alt="AHAM" id="logo" draggable="false">
         <h1>AutoHide AutoMod</h1>
         <a href="/blocklist.html" class="page">Blocklist</a>
         <a href="/options.html" class="page">Options</a>
         <a href="/about.html" class="page">About</a>
     </div>
-    <div id="content">
-        <p>Dang, even more options?!</p>
-    </div>
+	<div light="style-light" id="content">
+		<p>Dang, even more options?!</p>
+		<!--<input type="checkbox" id="dark-mode">-->
+		<p>Dark mode <input type="checkbox" class="options select" id="dark-mode"></p>
+		<button type="submit" id="save">Save</button>
+	</div>
 </body>
 </html>

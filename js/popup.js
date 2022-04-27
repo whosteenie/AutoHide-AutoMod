@@ -1,23 +1,40 @@
 ﻿
+var isActivated;
+const images = document.getElementsByClassName("icon");
+const enabled = document.getElementById("enabled");
+const disabled = document.getElementById("disabled");
+
 document.getElementById("activate").addEventListener("click", toggleActivate);
+document.getElementById("options").addEventListener("click", openOptions);
+
+loadSettings();
 
 function toggleActivate() {
+    isActivated = !isActivated;
 
-    var images = document.getElementsByClassName("icon");
-    for(const image of images) {
-        image.classList.toggle("hidden");
-    }
+    toggleImages();
 
-    // TODO: update block rules if activated/deactivated
+    chrome.storage.sync.set({ "active": isActivated });
 }
 
-document.getElementById("options").addEventListener("click", openOptions);
+function toggleImages() {
+    if(isActivated) {
+        enabled.classList?.remove("hidden");
+        disabled.classList.add("hidden");
+    } else {
+        disabled.classList?.remove("hidden");
+        enabled.classList.add("hidden");
+    }
+}
 
 function openOptions() {
     window.open("/blocklist.html");
 }
 
-// TODO: load blocked users on this page
 function loadSettings() {
+    chrome.storage.sync.get("active", function (result) {
+        isActivated = result["active"];
 
+        toggleImages();
+    });
 }
