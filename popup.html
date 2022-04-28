@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css\popup.css">
 </head>
 <body>
-    <div>
+    <div id="popup-top-menu">
         <button type="button" class="activate" id="activate">
             <img src="img\autohide128.png" alt="Enabled" class="icon" id="enabled" title="Click to disable" draggable="false">
             <img src="img\grayscale128.png" alt="Disabled" class="icon hidden" id="disabled" title="Click to enable" draggable="false">
@@ -17,21 +17,8 @@
     </div>
     <div id="popup-content">
         <h2 id="popup-h2">Blocked users</h2>
-        <table>
-            <tr>
-                <td><img src="img\blocked.png" alt="•" class="popup-status"></td>
-                <td>/user/AutoModerator/</td>
-            </tr>
-            <tr>
-                <td><img src="img\blocked.png" alt="•" class="popup-status"></td>
-                <td>/user/a-mirror-bot/</td>
-            </tr>
-            <tr>
-                <td><img src="img\expand.png" alt="•" class="popup-status"></td>
-                <td>/user/DnANZ/</td>
-            </tr>
-        </table>
+        <table id="blocklist"></table>
+		<button type="submit" id="options">Options</button>
     </div>
-    <button type="submit" id="options">Options</button>
 </body>
 </html>

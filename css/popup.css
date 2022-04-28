@@ -1,7 +1,13 @@
 ﻿
 #popup-html {
     width: 210px;
-    height: 300px;
+    min-height: 300px;
+	height: max-content;
+	background-color: #EDEDED;
+}
+
+body {
+	margin: 0;
 }
 
 .activate {
@@ -27,7 +33,14 @@
     display: none;
 }
 
+#popup-top-menu {
+	padding: 10px;
+	box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+	background-color: #9C9C9C;
+}
+
 #popup-h2 {
+/*	margin-top: 5px;*/
     margin-bottom: 0px;
 }
 
@@ -40,9 +53,9 @@
 }
 
 #options {
-    position: relative;
-    top: 54px;
-    left: 135px;
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
 }
 
 img {
@@ -55,3 +68,27 @@ img {
 #popup-content {
     margin-left: 10px;
 }
+
+/* ------------- WEBPAGE GLOBAL STYLE ------------- */
+
+/* --- light mode --- */
+#popup-top-menu.style-light {
+	background-color: #9C9C9C;
+}
+
+#popup-html.style-light {
+	background-color: #EDEDED;
+	color: black;
+}
+
+/* --- dark mode --- */
+#popup-top-menu.style-dark {
+	background-color: #202020;
+}
+
+#popup-html.style-dark {
+	background-color: #292929;
+	color: #E2E2E2;
+}
+
+/* ------------------------------------------------ */

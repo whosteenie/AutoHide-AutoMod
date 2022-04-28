@@ -11,28 +11,17 @@ var contextMenuBlock = {
     "contexts": ["link"]
 };
 
-// TEMP: readability
-chrome.tabs.onActivated.addListener(
-    tab =>
-    {
-        chrome.tabs.get(tab.tabId, current_tab_info =>
-        {
-            if(/^https:\/\/www\.reddit\.com\/r\/.*\/comments\/.*/.test(current_tab_info.url)) {
-                chrome.scripting.executeScript({ target: { tabId: tab.tabId }, files: ["js/foreground.js"] });
-                chrome.contextMenus.create(contextMenuHide);
-                chrome.contextMenus.create(contextMenuBlock);
-            } else {
-                //chrome.contextMenus?.remove("hide");
-                //chrome.contextMenus?.remove("block");
-                chrome.contextMenus.removeAll();
-            }
-        });
-    });
+chrome.tabs.onUpdated.addListener( (tabId, changeInfo, tab) => {
+	if(/^https:\/\/www\.reddit\.com\/r\/.*\/comments\/.*/.test(tab.url)) {
+		chrome.scripting.executeScript({ target: { tabId: tabId }, files: ["js/foreground.js"] });
 
-function customBlock() {
-    console.log("add blockrule");
-}
-
-function customHide() {
-    console.log("add hiderule");
-}
+		if(tab.status === "complete") {
+			chrome.contextMenus.removeAll();
+			chrome.contextMenus.create(contextMenuHide);
+			chrome.contextMenus.create(contextMenuBlock);
+		}
+	} else {
+		chrome.contextMenus.removeAll();
+		chrome.storage.sync.remove("onpage");
+	}
+});

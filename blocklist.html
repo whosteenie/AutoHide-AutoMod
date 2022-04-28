@@ -5,16 +5,18 @@
 <head>
     <meta charset="utf-8" />
     <title>AutoHide AutoMod — Blocklist</title>
-    <script defer src="js\blocklist.js"></script>
-    <link rel="stylesheet" type="text/css" href="css\stylesheet.css">
+    <script defer src="js/blocklist.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 </head>
 <body>
     <div id="top-menu">
-        <img src="img\autohide128.png" alt="AHAM" id="logo" draggable="false">
+        <img src="img/autohide128.png" alt="AHAM" id="logo" draggable="false">
         <h1>AutoHide AutoMod</h1>
-        <a href="/blocklist.html" class="page">Blocklist</a>
-        <a href="/options.html" class="page">Options</a>
-        <a href="/about.html" class="page">About</a>
+		<span id="pages">
+			<a href="/blocklist.html" class="page">Blocklist</a>
+			<a href="/options.html" class="page">Options</a>
+			<a href="/about.html" class="page">About</a>
+		</span>
     </div>
     <div id="content">
         <div>
@@ -24,28 +26,33 @@
                     <input type="text" id="filter" placeholder="Filter blocklist...">
                     <h3 id="group-edit">Edit Selected</h3>
                     <span class="no-select">
-                        <img src="img\expand.png" alt="Hidden" class="status" draggable="false">
+                        <img src="img/expand.png" alt="Hidden" class="status" draggable="false">
                         <label class="toggle">
                             <input type="checkbox" id="group-status">
                             <span class="slider"></span>
                         </label>
-                        <img src="img\blocked.png" alt="Blocked" class="status" draggable="false">
+                        <img src="img/blocked.png" alt="Blocked" class="status" draggable="false">
                     </span>
                 </div>
             </div>
-            <div>
+            <div id="table">
                 <table id="blocklist">
-                    <tr id="headers">
-                        <th id="head-check">
-                            <input type="checkbox" id="select-all">
-                        </th>
-                        <th id="head-user">
-                            /user/name/
-                        </th>
-                        <th id="head-status">
-                            Status: Hidden / Blocked
-                        </th>
-                    </tr>
+					<thead>
+						<tr id="headers">
+							<th id="head-check">
+								<input type="checkbox" id="select-all">
+							</th>
+							<th id="head-user">
+								/user/name/
+							</th>
+							<th id="head-status">
+								Status: Hidden / Blocked
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						
+					</tbody>
                 </table>
             </div>
         </div>
@@ -54,7 +61,7 @@
             <button type="submit" id="add">Add</button>
             <button type="submit" id="remove">Remove</button>
             <button type="submit" id="save">Save</button>
-            <form href="/blocklist.html" id="cancel">
+            <form action="/blocklist.html" id="cancel">
                 <button type="submit">Cancel</button>
             </form>
             <p id="warning"></p>

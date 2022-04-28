@@ -12,15 +12,18 @@
     <div class="style-light" id="top-menu">
         <img src="img\autohide128.png" alt="AHAM" id="logo" draggable="false">
         <h1>AutoHide AutoMod</h1>
-        <a href="/blocklist.html" class="page">Blocklist</a>
-        <a href="/options.html" class="page">Options</a>
-        <a href="/about.html" class="page">About</a>
+		<span id="pages">
+			<a href="/blocklist.html" class="page">Blocklist</a>
+			<a href="/options.html" class="page">Options</a>
+			<a href="/about.html" class="page">About</a>
+		</span>
     </div>
 	<div light="style-light" id="content">
-		<p>Dang, even more options?!</p>
+		<p id="description">Dang, even more options?!</p>
 		<!--<input type="checkbox" id="dark-mode">-->
 		<p>Dark mode <input type="checkbox" class="options select" id="dark-mode"></p>
 		<button type="submit" id="save">Save</button>
+		<p id="warning"></p>
 	</div>
 </body>
 </html>

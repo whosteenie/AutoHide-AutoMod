@@ -2,106 +2,111 @@
 /* <------------------------------ blocklist ------------------------------> */
 
 body {
-    display: flex;
-    flex-flow: column;
     margin: 0;
-    align-items: center;
 	width: 100vw;
-    height: 100vh;
 }
 
 #top-menu {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    width: 100%
+	z-index: 2;
+	padding: 10px 0;
+	box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+    width: 100vw;
 }
 
+/* long blocklist goes over content container */
 #content {
-    display: flex;
-    flex-flow: column;
-    width: 1000px;
-    height: 100vh;
-    align-items: center;
+	z-index: 1;
     padding-bottom: 30px;
+	box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+    width: 1000px;
+}
+
+#content, body {
+	display: flex;
+    flex-flow: column;
+	overflow: auto;
+	height: 100vh;
+    align-items: center;
+}
+
+#pages, #table-title, #input { 
+	white-space: nowrap;
 }
 
 #logo {
-    padding: 10px;
-    padding-left: 20px;
-    padding-right: 15px;
+	padding: 10px 15px 10px 20px;
 }
 
 h1 {
     display: inline;
-    vertical-align: middle;
     font-size: 40px;
-    white-space: nowrap;
 }
 
 .page {
-    vertical-align: middle;
-    padding-left: 20px;
+    margin-left: 27px;
     font-size: 20px;
 }
 
-img {
-    vertical-align: middle;
-    user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
+#pages {
+	float: right;
+	margin-right: 52px;
+	line-height: 145px;
 }
 
 h2 {
     display: inline;
-    vertical-align: middle;
-    padding: 10px;
+    margin: 10px;
     font-size: 25px;
 }
 
+h1, h2, img, .page, #filter, .options {
+	vertical-align: middle;
+}
+
 #table-title {
-    margin-top: 10px;
+    margin-top: 45px;
 }
 
 #group-edit {
     display: inline-block;
-    margin: 20px 15px;
-    width: 90px;
+    margin: 20px 17.5px;
 }
 
 #blocklist {
     width: 600px;
-    min-width: max-content;
 }
 
 #filter {
-    display: inline;
-    vertical-align: middle;
     line-height: 2;
 }
 
 #input {
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 #warning {
-    color: red;
     margin-top: 5px;
+    color: red;
 }
 
 #headers {
-    user-select: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
+	height: 25px;
 }
 
-.no-select {
+.no-select, #headers, img {
     user-select: none;
     -webkit-user-select: none;
+	-moz-user-select: none;
     -ms-user-select: none;
 }
 
 tr:not(#headers) {
     height: 50px;
+}
+
+#table {
+	display: flex;
+	justify-content: center;
 }
 
 #head-check {
@@ -112,8 +117,18 @@ tr:not(#headers) {
     width: 215px;
 }
 
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+table {
+	box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
+}
+
 td {
     text-align: center;
+	color: black;
 }
 
 button, .select, #select-all, th {
@@ -138,8 +153,8 @@ button, .select, #select-all, th {
 }
 
 a {
-    color: #2525EA;
     text-decoration: none;
+    color: #3151EE;
 }
 
 a:hover {
@@ -147,7 +162,7 @@ a:hover {
 }
 
 a:active {
-    color: red;
+    color: #F7100B;
 }
 
 /* <----------------- Slider button -----------------> */
@@ -155,10 +170,10 @@ a:active {
 /* slider outer oval */
 .toggle {
     position: relative;
-    vertical-align: middle;
     display: inline-block;
     width: 60px;
     height: 34px;
+    vertical-align: middle;
 }
 
 /* default checkbox */
@@ -177,7 +192,7 @@ a:active {
     right: 0;
     transition: .2s;
     border-radius: 34px;
-    background-color: #2196F3;
+    background-color: #48A8F7;
     cursor: pointer;
 }
 
@@ -192,21 +207,23 @@ a:active {
     transition: .2s;
     border-radius: 50%;
     background-color: white;
+	box-shadow: 6px 0 6px 0 #00000027, 6px 0px 18px 0 #00000024;
 }
 
 /* slider outer oval checked color */
 input:checked + .slider {
-    background-color: #F32C21;
+    background-color: #E63020;
 }
 
 /* slider outer oval focus outline */
 input:focus + .slider {
-    box-shadow: 0 0 1px #F32C21;
+    box-shadow: 0 0 1px #E63020;
 }
 
 /* slider inner circle translation */
 input:checked + .slider:before {
     transform: translateX(26px);
+	box-shadow: -6px 0 6px 0 #00000027, -6px 0px 18px 0 #00000024;
 }
 
 /* <----------------- Slider button -----------------> */
@@ -215,13 +232,13 @@ input:checked + .slider:before {
 
 /* <------------------------------- options -------------------------------> */
 
-.options {
-	vertical-align: middle;
-}
-
 /* <----------------------------- options end -----------------------------> */
 
 /* <-------------------------------- about --------------------------------> */
+
+#greeting, #description {
+	margin-top: 150px;
+}
 
 #github {
     margin-right: 25px;
@@ -233,14 +250,14 @@ input:checked + .slider:before {
 
 .contact {
     display: inline-block;
+    margin-top: 10px;
     width: 100px;
     height: 100px;
-    margin-top: 10px;
 }
 
 .link-image {
-    line-height: 0;
     font-size: 0;
+    line-height: 0;
     color: transparent;
 }
 
@@ -254,24 +271,42 @@ input:checked + .slider:before {
 }
 
 body.style-light {
-	background-color: #ABABAB;
+	background-color: #C1C1C1;
+	color: black;
 }
 
 #content.style-light {
 	background-color: #EDEDED;
 }
 
+.entries.style-light:nth-child(2n - 1) {
+    background-color: #A3A3A3;
+}
+
+.entries.style-light:nth-child(2n) {
+    background-color: #CDCDCD;
+}
+
 /* --- dark mode ---*/
 #top-menu.style-dark {
-	background-color: #3F3F3F;
+	background-color: #202020;
 }
 
 body.style-dark {
-	background-color: #606060;
+	background-color: #1D1D1D;
+	color: #E2E2E2;
 }
 
 #content.style-dark {
-	background-color: #7D7D7D;
+	background-color: #292929;
+}
+
+.entries.style-dark:nth-child(2n - 1) {
+    background-color: #7F7F7F;
+}
+
+.entries.style-dark:nth-child(2n) {
+    background-color: #A9A9A9;
 }
 
 /* --- classic mode --- */
@@ -281,20 +316,18 @@ body.style-dark {
 
 body.style-classic {
 	background-color: #F6A9A9;
+	color: black;
 }
 
 #content.style-classic {
 	background-color: lightblue;
 }
 
-/* --- blocklist colors --- */
-/* filtering list needs to modify color rule */
-/* might need to do this through js, css doesn't program! */
-tr:nth-child(2n - 1) {
+.entries.style-classic:nth-child(2n - 1) {
     background-color: #A3A3A3;
 }
 
-tr:nth-child(2n) {
+.entries.style-classic:nth-child(2n) {
     background-color: #CDCDCD;
 }
 

@@ -3,6 +3,8 @@
 let body = document.getElementsByTagName("body")[0];
 let topMenu = document.getElementById("top-menu");
 let content = document.getElementById("content");
+let title = document.getElementsByTagName("h1")[0];
+let rows = document.getElementsByClassName("entries");
 /* ------------- */
 
 const filter = document.getElementById("filter");
@@ -11,12 +13,12 @@ const table = document.getElementById("blocklist");
 const userlist = document.getElementsByClassName("user");
 const blockRule = document.getElementById("block-rule");
 const warning = document.getElementById("warning");
+
 let checks = document.getElementsByClassName("select");
 let toggles = document.querySelectorAll("input.toggle");
 let groupSelect = document.getElementById("select-all");
 let currSort = "time";
 
-document.addEventListener("DOMContentLoaded", loadSettings);
 document.addEventListener('keydown', e => {
     if(e.ctrlKey && e.key === 's') {
         e.preventDefault();
@@ -35,7 +37,9 @@ document.getElementById("remove").addEventListener("click", removeBlock);
 
 document.getElementById("save").addEventListener("click", saveSettings);
 
+loadSettings();
 addInputs();
+hideElements();
 
 // TODO: not a very efficient way to check which header is clicked
 document.getElementById("head-check").addEventListener("click", sortTable);
@@ -99,10 +103,10 @@ function addBlock(userName) {
     const statuses = [];
     for(let i = 0; i < toggles.length; i++) {
         statuses.push(toggles[i].checked);
-    }
+	}
 
     let template = `
-                <tr id="user${index}">
+                <tr class="entries" id="user${index}">
                     <td class="no-select">
                         <input type="checkbox" class="select">
                     </td>
@@ -118,12 +122,14 @@ function addBlock(userName) {
                 </tr>
                     `;
 
-    tablebody.innerHTML += template;
+	// TODO: this line takes about 1ms to run
+	tablebody.innerHTML += template;
 
     blockRule.value = "";
     filter.value = "";
-    filterList("");
-    addInputs();
+    filterList();
+	addInputs();
+	hideElements();
 
     for(let i = 0; i < toggles.length; i++) {
         toggles[i].checked = statuses[i];
@@ -132,8 +138,8 @@ function addBlock(userName) {
     toggles[toggles.length - 1].checked = groupStatus.checked;
 }
 
-// TODO: this is required mostly because adding a row as a template
-//       string updates the whole table and breaks previously created
+// TODO: this is required because adding a row as a template string
+//       updates the whole table and breaks previously created
 //       variables and event triggers
 function addInputs() {
     groupSelect = document.getElementById("select-all");
@@ -281,13 +287,6 @@ function sortTable() {
     }
 }
 
-function updateSettings(result) {
-    let users = document.querySelectorAll("[id^='user']");
-    let key = "user" + users.length;
-
-    addBlock(result[key].user);
-}
-
 function loadSettings() {
 	chrome.storage.sync.get(["userlist"], function (result) {
 		for(let i = 0; i < result.userlist.length; i++) {
@@ -298,9 +297,14 @@ function loadSettings() {
 	});
 
 	chrome.storage.sync.get("style", function (result) {
-		body.classList.add(result["style"]);
-		topMenu.classList.add(result["style"]);
-		content.classList.add(result["style"]);
+		body.classList.add(result.style);
+		topMenu.classList.add(result.style);
+		content.classList.add(result.style);
+		title.classList.add(result.style);
+
+		for(const row of rows) {
+			row.classList.add(result.style);
+		}
 	});
 }
 
@@ -320,24 +324,40 @@ function saveSettings() {
 		blocklist.push({ [key]: data });
 	}
 
-	let entry = { ["userlist"]: blocklist };
-	chrome.storage.sync.set(entry);
+	let list = { ["userlist"]: blocklist };
+	chrome.storage.sync.set(list);
 
     warning.style.color = "green";
     warning.innerHTML = "Saved settings";
 }
 
 function hideElements() {
-	let pageTitle = document.getElementsByTagName("h1")[0];
+	let statusImages = document.getElementsByClassName("status");
 
 	if(window.innerWidth < 1000) {
 		content.classList.add("fixed");
 	} else {
 		content.classList.remove("fixed");
 	}
-	if(window.innerWidth < 832) {
-		pageTitle.classList.add("hidden");
+	if(window.innerWidth < 874) {
+		title.classList.add("hidden");
 	} else {
-		pageTitle.classList.remove("hidden");
+		title.classList.remove("hidden");
+	}
+
+	let statusHead = document.getElementById("head-status");
+
+	for(const image of statusImages) {
+		if(window.innerWidth < 650) {
+			image.classList.add("hidden");
+			table.style.width = "480px";
+			statusHead.style.width = "100px";
+			statusHead.innerHTML = "Status";
+		} else {
+			image.classList.remove("hidden");
+			table.removeAttribute("style");
+			statusHead.removeAttribute("style");
+			statusHead.innerHTML = "Status: Hidden / Blocked";
+		}
 	}
 }
