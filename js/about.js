@@ -12,16 +12,16 @@ loadSettings();
 hideElements();
 
 function loadSettings() {
-	chrome.storage.sync.get("style", function (result) {
-		body.classList.add(result.style);
-		topMenu.classList.add(result.style);
-		content.classList.add(result.style);
-		title.classList.add(result.style);
+	chrome.storage.sync.get("theme", function (result) {
+		body.classList.add(result.theme);
+		topMenu.classList.add(result.theme);
+		content.classList.add(result.theme);
+		title.classList.add(result.theme);
 
-		if(result.style === "style-dark") {
-			document.getElementById("github").src = "/img/github_light.png";
+		if(result.theme === "theme-dark") {
+			document.getElementById("github").src = "/img/github_light.svg";
 		} else {
-			document.getElementById("github").src = "/img/github_dark.png";
+			document.getElementById("github").src = "/img/github_dark.svg";
 		}
 	});
 }

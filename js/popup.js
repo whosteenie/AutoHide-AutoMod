@@ -20,6 +20,7 @@ function toggleActivate() {
     chrome.storage.sync.set({ "active": isActivated });
 }
 
+// TODO: toggle image on hover and add press animation
 function toggleImages() {
     if(isActivated) {
         enabled.classList?.remove("hidden");
@@ -43,35 +44,33 @@ function loadSettings() {
 
 	chrome.storage.sync.get("onpage", function (result) {
 		if(result.onpage === undefined) {
+			console.log("No users on this page!");
 			return;
 		}
 
-		for(const index of result.onpage) {
-			chrome.storage.sync.get("userlist", function (result) {
-				let key = "user" + index;
+		for(let i = 0; i < result.onpage.length; i++) {
+			console.log(result.onpage);
+			let status = "";
+			if(result.onpage[i].status) {
+				status = "img/blocked.svg";
+			} else {
+				status = "img/expand.svg";
+			}
 
-				let status = "";
-				if(result.userlist[index][key].status) {
-					status = "img/blocked.png";
-				} else {
-					status = "img/expand.png"
-				}
-
-				let table = document.getElementById("blocklist");
-				let template = `
+			let table = document.getElementById("blocklist");
+			let template = `
                 <tr>
 					<td><img src=${status} alt="•" class="popup-status"></td>
-					<td>${result.userlist[index][key].user}</td>
+					<td>${result.onpage[i].user}</td>
 				</tr>
                     `;
 
-				table.innerHTML += template;
-			});
+			table.innerHTML += template;
 		}
 	});
 
-	chrome.storage.sync.get("style", function (result) {
-		html.classList.add(result.style);
-		topMenu.classList.add(result.style);
+	chrome.storage.sync.get("theme", function (result) {
+		html.classList.add(result.theme);
+		topMenu.classList.add(result.theme);
 	});
 }

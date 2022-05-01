@@ -3,7 +3,6 @@
     width: 210px;
     min-height: 300px;
 	height: max-content;
-	background-color: #EDEDED;
 }
 
 body {
@@ -36,20 +35,18 @@ body {
 #popup-top-menu {
 	padding: 10px;
 	box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
-	background-color: #9C9C9C;
 }
 
 #popup-h2 {
-/*	margin-top: 5px;*/
     margin-bottom: 0px;
 }
 
 .popup-status {
-    height: 15px;
+    padding-right: 5px;
     width: 15px;
+    height: 15px;
     vertical-align: middle;
     float: right;
-    padding-right: 5px;
 }
 
 #options {
@@ -72,22 +69,26 @@ img {
 /* ------------- WEBPAGE GLOBAL STYLE ------------- */
 
 /* --- light mode --- */
-#popup-top-menu.style-light {
-	background-color: #9C9C9C;
+#popup-top-menu.theme-light {
+	/* #9C9C9C */
+	background: linear-gradient(225deg, #a7a7a7, #8c8c8c);
 }
 
-#popup-html.style-light {
-	background-color: #EDEDED;
+#popup-html.theme-light {
+	/* #EDEDED */
+	background: linear-gradient(225deg, #fefefe, #d5d5d5);
 	color: black;
 }
 
 /* --- dark mode --- */
-#popup-top-menu.style-dark {
-	background-color: #202020;
+#popup-top-menu.theme-dark {
+	/* #202020 */
+	background: linear-gradient(225deg, #222222, #1d1d1d);
 }
 
-#popup-html.style-dark {
-	background-color: #292929;
+#popup-html.theme-dark {
+	/* #292929 */
+	background: linear-gradient(225deg, #2c2c2c, #252525);
 	color: #E2E2E2;
 }
 

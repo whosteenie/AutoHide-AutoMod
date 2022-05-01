@@ -7,6 +7,12 @@ let title = document.getElementsByTagName("h1")[0];
 /* ------------- */
 
 let darkMode = document.getElementById("dark-mode");
+let ruleSelect = document.getElementById("rule");
+let ruleOptions = ruleSelect.options;
+let stickySelect = document.getElementById("sticky");
+let stickyOptions = stickySelect.options;
+let themeSelect = document.getElementById("theme");
+let themeOptions = themeSelect.options;
 let warning = document.getElementById("warning");
 
 window.addEventListener("resize", hideElements);
@@ -17,19 +23,28 @@ document.addEventListener('keydown', e => {
 	}
 });
 
-document.getElementById("save").addEventListener("click", saveSettings);
+document.getElementById("save-options").addEventListener("click", saveSettings);
 
 loadSettings();
 hideElements();
 
 function loadSettings() {
-	chrome.storage.sync.get("style", function (result) {
-		body.classList.add(result.style);
-		topMenu.classList.add(result.style);
-		content.classList.add(result.style);
-		title.classList.add(result.style);
+	chrome.storage.sync.get("ruleIndex", function (result) {
+		ruleSelect.value = ruleOptions[result.ruleIndex].value;
+	});
 
-		darkMode.checked = result.style === "style-dark";
+	chrome.storage.sync.get("stickyIndex", function (result) {
+		stickySelect.value = stickyOptions[result.stickyIndex].value;
+	});
+
+	chrome.storage.sync.get("themeIndex", function (result) {
+		let currTheme = themeOptions[result.themeIndex].value
+
+		themeSelect.value = currTheme;
+		body.classList.add(currTheme);
+		topMenu.classList.add(currTheme);
+		content.classList.add(currTheme);
+		title.classList.add(currTheme);
 	});
 
 	chrome.storage.sync.get("saved", function (result) {
@@ -42,15 +57,21 @@ function loadSettings() {
 }
 
 function saveSettings() {
-	let style = "";
+	let ruleIndex = ruleSelect.selectedIndex;
+	let rule = ruleOptions[ruleIndex].value;
+	chrome.storage.sync.set({ "ruleIndex": ruleIndex });
+	chrome.storage.sync.set({ "rule": rule });
 
-	if(darkMode.checked) {
-		style = "style-dark";
-	} else {
-		style = "style-light";
-	}
+	let stickyIndex = stickySelect.selectedIndex;
+	let sticky = stickyOptions[stickyIndex].value;
+	chrome.storage.sync.set({ "stickyIndex": stickyIndex });
+	chrome.storage.sync.set({ "sticky": sticky });
 
-	chrome.storage.sync.set({ "style": style });
+	let themeIndex = themeSelect.selectedIndex;
+	let theme = themeOptions[themeIndex].value;
+	chrome.storage.sync.set({ "theme": theme });
+	chrome.storage.sync.set({ "themeIndex": themeIndex });
+
 	chrome.storage.sync.set({ "saved": true });
 
 	location.reload();

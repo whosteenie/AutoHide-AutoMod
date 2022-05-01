@@ -5,24 +5,49 @@
 <head>
     <meta charset="utf-8" />
     <title>AutoHide AutoMod — Options</title>
-    <script defer src="js\options.js"></script>
-    <link rel="stylesheet" type="text/css" href="css\stylesheet.css">
+    <script defer src="js/options.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 </head>
 <body class="style-light">
     <div class="style-light" id="top-menu">
-        <img src="img\autohide128.png" alt="AHAM" id="logo" draggable="false">
-        <h1>AutoHide AutoMod</h1>
-		<span id="pages">
+		<div id="title">
+			<img src="img/autohide_automod.svg" alt="AHAM" id="logo">
+			<h1>AutoHide AutoMod</h1>
+		</div>
+		<div id="pages">
 			<a href="/blocklist.html" class="page">Blocklist</a>
 			<a href="/options.html" class="page">Options</a>
 			<a href="/about.html" class="page">About</a>
-		</span>
+		</div>
     </div>
 	<div light="style-light" id="content">
 		<p id="description">Dang, even more options?!</p>
-		<!--<input type="checkbox" id="dark-mode">-->
-		<p>Dark mode <input type="checkbox" class="options select" id="dark-mode"></p>
-		<button type="submit" id="save">Save</button>
+		<div id="options-list">
+			<span class="options-entry">
+				<label class="options-label">Default Rule:</label>
+				<select class="options-select" id="rule">
+					<option class="rule-options" value="false">Hide</option>
+					<option class="rule-options" value="true">Block</option>
+				</select>
+			</span>
+			<span class="options-entry">
+				<label class="options-label">Stickied:</label>
+				<select class="options-select" id="sticky">
+					<option class="sticky-options" value="unblocked">Unblocked</option>
+					<option class="sticky-options" value="false">Hidden</option>
+					<option class="sticky-options" value="true">Blocked</option>
+				</select>
+			</span>
+			<span class="options-entry">
+				<label class="options-label">Theme:</label>
+				<select class="options-select" id="theme">
+					<option class="theme-options" value="theme-light">Light mode</option>
+					<option class="theme-options" value="theme-dark">Dark mode</option>
+					<option class="theme-options" value="theme-classic">Classic mode</option>
+				</select>
+			</span>
+		</div>
+		<button type="submit" id="save-options">Save</button>
 		<p id="warning"></p>
 	</div>
 </body>

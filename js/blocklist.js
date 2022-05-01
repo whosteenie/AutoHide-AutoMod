@@ -5,6 +5,7 @@ let topMenu = document.getElementById("top-menu");
 let content = document.getElementById("content");
 let title = document.getElementsByTagName("h1")[0];
 let rows = document.getElementsByClassName("entries");
+let headers = document.getElementById("headers");
 /* ------------- */
 
 const filter = document.getElementById("filter");
@@ -30,6 +31,7 @@ window.addEventListener("resize", hideElements);
 
 filter.addEventListener("keyup", filterList);
 groupStatus.addEventListener("click", toggleSelected);
+groupStatus.addEventListener("keydown", (e) => { if(e.code === "Enter") { groupStatus.click(); } });
 
 blockRule.addEventListener("keydown", (e) => { if(e.code === "Enter") { validateInput(); } });
 document.getElementById("add").addEventListener("click", validateInput);
@@ -37,40 +39,20 @@ document.getElementById("remove").addEventListener("click", removeBlock);
 
 document.getElementById("save").addEventListener("click", saveSettings);
 
-loadSettings();
-addInputs();
-hideElements();
-
-// TODO: not a very efficient way to check which header is clicked
 document.getElementById("head-check").addEventListener("click", sortTable);
 document.getElementById("head-user").addEventListener("click", sortTable);
 document.getElementById("head-status").addEventListener("click", sortTable);
 
-// TODO:
-// I don't understand how promises work, but this technically tells 
-// me whether or not an input is truly an active Reddit username or not
-checkUser("AutoModerator");
-//function checkUser(testName) {
-//    fetch("https://www.reddit.com/api/username_available.json?user=" + testName)
-//        .then(response => response.text())
-//        .then(text => console.log(text));
-//}
-// I understand this syntax a bit more, but still doesn't allow me to use
-// this data as I'd expect
-async function checkUser(testName) {
-    let url = "https://www.reddit.com/api/username_available.json?user=" + testName;
-
-    let response = await fetch(url);
-    let data = await response.text();
-    //console.log(data);
-}
+loadSettings();
+addInputs();
+hideElements();
 
 async function validateInput() {
-    warning.innerHTML = "";
-    warning.style.color = "red";
+	warning.innerText = "";
+	warning.style.color = "red";
 
     const regexp = /^(?:https:\/\/)?(?:www\.)?(?:reddit\.com)?\/?\/?(?:(?:user|u)\/)?([\w-]{3,20})\/?$/;
-    let input = blockRule.value;
+    let input = blockRule.value.trim();
     let userName = "";
 
     let url = "https://www.reddit.com/api/username_available.json?user=" + input;
@@ -82,13 +64,13 @@ async function validateInput() {
     if(isValid && exists) {
         userName = "/user/" + regexp.exec(input)[1] + "/";
     } else {
-        warning.innerHTML = "Please input a valid user";
+        warning.innerText = "Please input a valid user";
         return;
     }
 
     for(let i = 0; i < userlist.length; i++) {
-        if(userName.toUpperCase() === userlist[i].innerHTML.toUpperCase()) {
-            warning.innerHTML = "Unable to add duplicate user";
+        if(userName.toUpperCase() === userlist[i].innerText.toUpperCase()) {
+            warning.innerText = "Unable to add duplicate user";
             return;
         }
     }
@@ -112,12 +94,12 @@ function addBlock(userName) {
                     </td>
                     <td class="user">${userName}</td>
                     <td class="no-select">
-                        <img src="img/expand.png" alt="Hidden" class="status" draggable="false">
+                        <img src="img/expand.svg" alt="Hidden" class="status" draggable="false">
                         <label class="toggle">
                             <input type="checkbox" class="toggle">
                             <span class="slider"></span>
                         </label>
-                        <img src="img/blocked.png" alt="Blocked" class="status" draggable="false">
+                        <img src="img/blocked.svg" alt="Blocked" class="status" draggable="false">
                     </td>
                 </tr>
                     `;
@@ -130,6 +112,7 @@ function addBlock(userName) {
     filterList();
 	addInputs();
 	hideElements();
+	loadStyles();
 
     for(let i = 0; i < toggles.length; i++) {
         toggles[i].checked = statuses[i];
@@ -143,14 +126,19 @@ function addBlock(userName) {
 //       variables and event triggers
 function addInputs() {
     groupSelect = document.getElementById("select-all");
-    groupSelect.addEventListener("click", selectAll);
+	groupSelect.addEventListener("click", selectAll);
+	groupSelect.addEventListener("keydown", (e) => { if(e.code === "Enter") { groupSelect.click(); } });
     checks = document.getElementsByClassName("select");
 
-    for(let i = 0; i < checks.length; i++) {
-        checks[i].addEventListener("click", updateSelect);
-    }
+	for(const check of checks) {
+		check.addEventListener("click", updateSelect);
+		check.addEventListener("keydown", (e) => { if(e.code === "Enter") { check.click(); } });
+	}
 
-    toggles = document.querySelectorAll("input.toggle");
+	toggles = document.querySelectorAll("input.toggle");
+	for(const toggle of toggles) {
+		toggle.addEventListener("keydown", (e) => { if(e.code === "Enter") { toggle.click(); } });
+	}
 }
 
 function removeBlock() {
@@ -160,11 +148,11 @@ function removeBlock() {
         checkStates.push(check.checked);
     }
 
-    let checker = arr => arr.every(v => v === false);
+    let checker = arr => arr.every(c => c === false);
 
     if(checker(checkStates)) {
         warning.style.color = "red";
-        warning.innerHTML = "Select users to remove";
+        warning.innerText = "Select users to remove";
         return;
     }
 
@@ -180,7 +168,7 @@ function removeBlock() {
         blocklist[i].id = "user" + i;
     }
 
-    warning.innerHTML = "";
+    warning.innerText = "";
     groupSelect.checked = false;
 }
 
@@ -191,12 +179,79 @@ function filterList() {
     let blocklist = document.querySelectorAll("[id^='user']");
 
     for(let i = 0; i < userlist.length; i++) {
-        if(userlist[i].innerHTML.toUpperCase().indexOf(input) > -1) {
+        if(userlist[i].innerText.toUpperCase().indexOf(input) > -1) {
             blocklist[i].removeAttribute("style");
         } else {
             blocklist[i].style.display = "none";
         }
     }
+}
+
+function sortTable() {
+	let n = null;
+
+	if(this.id === "head-check") {
+		n = 0;
+	} else if(this.id === "head-user") {
+		n = 1;
+	} else {
+		n = 2;
+	}
+
+	var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+	table = document.getElementById("blocklist");
+	switching = true;
+
+	dir = "asc";
+
+	while(switching) {
+		switching = false;
+		rows = table.rows;
+
+		for(i = 1; i < (rows.length - 1); i++) {
+			shouldSwitch = false;
+
+			x = rows[i].getElementsByTagName("td")[n];
+			y = rows[i + 1].getElementsByTagName("td")[n];
+
+			if(n === 0 || n === 2) {
+				if(dir === "asc") {
+					if(x.getElementsByTagName("input")[0].checked > y.getElementsByTagName("input")[0].checked) {
+						shouldSwitch = true;
+						break;
+					}
+				} else if(dir === "desc") {
+					if(x.getElementsByTagName("input")[0].checked < y.getElementsByTagName("input")[0].checked) {
+						shouldSwitch = true;
+						break;
+					}
+				}
+			} else {
+				if(dir === "asc") {
+					if(x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+						shouldSwitch = true;
+						break;
+					}
+				} else if(dir === "desc") {
+					if(x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+						shouldSwitch = true;
+						break;
+					}
+				}
+			}
+		}
+		if(shouldSwitch) {
+			rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+			switching = true;
+
+			switchcount++;
+		} else {
+			if(switchcount === 0 && dir === "asc") {
+				dir = "desc";
+				switching = true;
+			}
+		}
+	}
 }
 
 function toggleSelected() {
@@ -261,34 +316,22 @@ function updateSelect() {
     }
 }
 
-function sortTable() {
-    let checkCol = [];
-    let userCol = [];
-    let statusCol = [];
+function loadStyles() {
+	chrome.storage.sync.get("theme", function (result) {
+		body.classList.add(result.theme);
+		topMenu.classList.add(result.theme);
+		content.classList.add(result.theme);
+		title.classList.add(result.theme);
+		headers.classList.add(result.theme);
 
-    for(let i = 1; i < table.rows.length; i++) {
-        checkCol.push(table.rows[i].cells[0]);
-        userCol.push(table.rows[i].cells[1]);
-        statusCol.push(table.rows[i].cells[2]);
-    }
-
-    // is sort by selection useful?
-    let onButton = groupSelect.matches(":hover");
-
-    if(this === document.getElementById("head-check") && !onButton) {
-        currSort = "check";
-        console.log(currSort + "[0]: " + checkCol[0].querySelector("input").checked);
-    } else if(this === document.getElementById("head-user")) {
-        currSort = "user";
-        console.log(currSort + "[0]: " + userCol[0].innerHTML);
-    } else if(this === document.getElementById("head-status")) {
-        currSort = "status";
-        console.log(currSort + "[0]: " + statusCol[0].querySelector("input").checked);
-    }
+		for(const row of rows) {
+			row.classList.add(result.theme);
+		}
+	});
 }
 
 function loadSettings() {
-	chrome.storage.sync.get(["userlist"], function (result) {
+	chrome.storage.sync.get("userlist", function (result) {
 		for(let i = 0; i < result.userlist.length; i++) {
 			let key = "user" + i;
 			addBlock(result.userlist[i][key].user)
@@ -296,16 +339,11 @@ function loadSettings() {
 		}
 	});
 
-	chrome.storage.sync.get("style", function (result) {
-		body.classList.add(result.style);
-		topMenu.classList.add(result.style);
-		content.classList.add(result.style);
-		title.classList.add(result.style);
-
-		for(const row of rows) {
-			row.classList.add(result.style);
-		}
+	chrome.storage.sync.get("rule", function (result) {
+		groupStatus.checked = (result.rule === "true");
 	});
+
+	loadStyles();
 }
 
 function saveSettings() {
@@ -315,7 +353,7 @@ function saveSettings() {
 
 	for(let i = 0; i < userlist.length; i++) {
 		let data = {
-			"user": userlist[i].innerHTML,
+			"user": userlist[i].innerText,
 			"status": toggles[i].checked
 		};
 
@@ -328,7 +366,7 @@ function saveSettings() {
 	chrome.storage.sync.set(list);
 
     warning.style.color = "green";
-    warning.innerHTML = "Saved settings";
+    warning.innerText = "Saved settings";
 }
 
 function hideElements() {
@@ -352,12 +390,12 @@ function hideElements() {
 			image.classList.add("hidden");
 			table.style.width = "480px";
 			statusHead.style.width = "100px";
-			statusHead.innerHTML = "Status";
+			statusHead.innerText = "Status";
 		} else {
 			image.classList.remove("hidden");
 			table.removeAttribute("style");
 			statusHead.removeAttribute("style");
-			statusHead.innerHTML = "Status: Hidden / Blocked";
+			statusHead.innerText = "Status: Hidden / Blocked";
 		}
 	}
 }
