@@ -37,6 +37,7 @@ function openOptions() {
 
 function detectBlocks() {
 	chrome.storage.sync.get("onpage", function (result) {
+		console.log(result.onpage);
 		chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
 			let url = tabs[0].url;
 

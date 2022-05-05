@@ -331,12 +331,12 @@ body.theme-light {
 	background: linear-gradient(225deg, #eaeaea, #c5c5c5);
 }
 
-.entries.theme-light:nth-child(2n - 1) {
+.entries.theme-light.row-dark {
 	/* #A3A3A3 */
 	background: linear-gradient(225deg, #aeaeae, #939393);
 }
 
-.entries.theme-light:nth-child(2n) {
+.entries.theme-light.row-light {
 	/* #CDCDCD */
 	background: linear-gradient(225deg, #dbdbdb, #b9b9b9);
 }
@@ -363,12 +363,12 @@ body.theme-dark {
 	background: linear-gradient(225deg, #252525, #202020);
 }
 
-.entries.theme-dark:nth-child(2n - 1) {
-    /* #484848 */
+.entries.theme-dark.row-dark {
+	/* #484848 */
 	background: linear-gradient(225deg, #4d4d4d, #414141);
 }
 
-.entries.theme-dark:nth-child(2n) {
+.entries.theme-dark.row-light {
 	/* #5E5E5E */
 	background: linear-gradient(225deg, #656565, #555555);
 }
@@ -395,12 +395,12 @@ body.theme-classic {
 	background: linear-gradient(225deg, #eaeaea, #c5c5c5);
 }
 
-.entries.theme-classic:nth-child(2n - 1) {
+.entries.theme-classic.row-dark {
 	/* #A3A3A3 */
 	background: linear-gradient(225deg, #aeaeae, #939393);
 }
 
-.entries.theme-classic:nth-child(2n) {
+.entries.theme-classic.row-light {
 	/* #CDCDCD */
 	background: linear-gradient(225deg, #dbdbdb, #b9b9b9);
 }

@@ -3,16 +3,16 @@ var contextMenuHide = {
     "id": "hide",
     "title": "Add to hidden",
 	"contexts": ["link"],
-	"documentUrlPatterns": ["https://www.reddit.com/r/*/comments/*/"],
-	"targetUrlPatterns": ["https://www.reddit.com/user/*/"]
+	"documentUrlPatterns": ["https://www.reddit.com/r/*/comments/*"],
+	"targetUrlPatterns": ["https://www.reddit.com/user/*"]
 };
 
 var contextMenuBlock = {
     "id": "block",
     "title": "Add to blocked",
 	"contexts": ["link"],
-	"documentUrlPatterns": ["https://www.reddit.com/r/*/comments/*/"],
-	"targetUrlPatterns": ["https://www.reddit.com/user/*/"]
+	"documentUrlPatterns": ["https://www.reddit.com/r/*/comments/*"],
+	"targetUrlPatterns": ["https://www.reddit.com/user/*"]
 };
 
 chrome.tabs.onActivated.addListener( (activeInfo) => {
@@ -24,7 +24,9 @@ chrome.tabs.onActivated.addListener( (activeInfo) => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-	if(!/^https:\/\/www\.reddit\.com\/r\/.*\/comments\/.*/.test(tab.url)) {
+	if(/^https:\/\/www\.reddit\.com\/r\/.*\/comments\/.*/.test(tab.url)) {
+		chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["js/foreground.js"] });
+	} else {
 		chrome.storage.sync.set({ "onpage": [] });
 	}
 });
@@ -38,7 +40,7 @@ chrome.contextMenus.onClicked.addListener(function (data, tab) {
 
 	chrome.storage.sync.get("userlist", function (result) {
 		for(let i = 0; i < result.userlist.length; i++) {
-			let key = "user" + i;
+			let key = `user${i}`;
 			if(userData.toUpperCase() === result.userlist[i][key].user.toUpperCase()) {
 				console.log("Unable to add duplicate user");
 				return;
@@ -47,7 +49,7 @@ chrome.contextMenus.onClicked.addListener(function (data, tab) {
 
 		let updatedList = result.userlist;
 
-		let key = "user" + updatedList.length;
+		let key = `user${updatedList.length}`;
 		let user = { "status": statusData, "user": userData};
 		let newEntry = { [key]: user };
 

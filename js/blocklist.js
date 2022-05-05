@@ -54,14 +54,14 @@ async function validateInput() {
     let input = blockRule.value.trim();
     let userName = "";
 
-    let url = "https://www.reddit.com/api/username_available.json?user=" + input;
+	let url = "https://www.reddit.com/api/username_available.json?user=" + input;
     let response = await fetch(url);
-    let exists = !(await response.text() === "true");
+	let exists = !(await response.text() === "true");
 
     let isValid = regexp.test(input);
 
     if(isValid && exists) {
-        userName = "/user/" + regexp.exec(input)[1] + "/";
+        userName = `/user/${regexp.exec(input)[1]}/`;
     } else {
         warning.innerText = "Please input a valid user";
         return;
@@ -159,14 +159,14 @@ function removeBlock() {
 
     for(let i = 0; i < checkStates.length; i++) {
         if(checkStates[i]) {
-            document.getElementById("user" + i).remove();
+            document.getElementById(`user${i}`).remove();
         }
     }
 
     let blocklist = document.querySelectorAll("[id^='user']");
 
     for(let i = 0; i < blocklist.length; i++) {
-        blocklist[i].id = "user" + i;
+		blocklist[i].id = `user${i}`;
     }
 
     warning.innerText = "";
@@ -174,17 +174,29 @@ function removeBlock() {
 }
 
 function filterList() {
-    let input = filter.value.trim().toUpperCase();
+	let input = filter.value.trim().toUpperCase();
+	let shown = [];
 
     let blocklist = document.querySelectorAll("[id^='user']");
 
     for(let i = 0; i < userlist.length; i++) {
         if(userlist[i].innerText.toUpperCase().indexOf(input) > -1) {
-            blocklist[i].removeAttribute("style");
+			blocklist[i].removeAttribute("style");
+			shown.push(blocklist[i]);
         } else {
-            blocklist[i].style.display = "none";
+			blocklist[i].style.display = "none";
         }
-    }
+	}
+
+	for(let i = 0; i < shown.length; i++) {
+		if(i % 2 === 0) {
+			shown[i].classList.add("row-dark");
+			shown[i].classList?.remove("row-light");
+		} else {
+			shown[i].classList.add("row-light");
+			shown[i].classList?.remove("row-dark");
+		}
+	}
 }
 
 function sortTable() {
@@ -252,6 +264,8 @@ function sortTable() {
 			}
 		}
 	}
+
+	filterList();
 }
 
 function toggleSelected() {
@@ -331,7 +345,7 @@ function loadSettings(styles) {
 				console.log(result.userlist);
 
 				for(let i = 0; i < result.userlist.length; i++) {
-					let key = "user" + i;
+					let key = `user${i}`;
 					addBlock(result.userlist[i][key].user, true);
 					toggles[i].checked = result.userlist[i][key].status;
 				}
