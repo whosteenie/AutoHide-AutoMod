@@ -3,8 +3,10 @@ var blockIndex = null;
 var pageBlocked = [];
 
 var stickyClass = "_2ETuFsVzMBxiHia6HfJCTQ _2wd-K5Djdc9TGPRGDgmkpX";
-var comments = document.getElementsByClassName("_1YCqQVO-9r-Up6QPB9H6_4 _1YCqQVO-9r-Up6QPB9H6_4")[0];
-var commentsList = Array?.from(comments?.children);
+
+var comments = document.querySelector("._1YCqQVO-9r-Up6QPB9H6_4");
+var commentsList = Array.from?.(comments?.children);
+var commentsTotal = commentsList;
 
 docReady();
 
@@ -14,6 +16,17 @@ function docReady() {
 	} else {
 		document.addEventListener("DOMContentLoaded", isActive);
 	}
+}
+
+function buildList() {
+	let newComments = document.querySelector("._1YCqQVO-9r-Up6QPB9H6_4");
+	let newList = Array.from(newComments?.children);
+
+	commentsList = newList.filter(entry => !commentsTotal.includes(entry));
+	commentsTotal.push(...newList);
+
+	window.removeEventListener("scroll", buildList);
+	loadSettings();
 }
 
 function isActive() {
@@ -91,6 +104,8 @@ function blockUsers(userlist) {
 				}
 			}
 		}
+
+		window.addEventListener("scroll", buildList);
 	});
 }
 
@@ -100,7 +115,7 @@ function isHidden(users, comment, sticky) {
 
 	let shouldHide = users.includes(currName);
 
-	let isStickied = comment.querySelector(`[class="${stickyClass}" i]`) !== null;
+	let isStickied = comment.querySelector(`[class="${stickyClass}"]`) !== null;
 
 	if(shouldHide || (isStickied && (sticky !== null))) {
 		blockIndex = users.indexOf(currName);
