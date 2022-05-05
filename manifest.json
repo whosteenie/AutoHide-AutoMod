@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "AutoHide AutoMod",
-    "version": "1.5",
+    "version": "1.7",
     "description": "Automatically hides AutoModerator comments in Reddit.",
     "icons": {
         "16": "img/autohide16.png",
@@ -22,7 +22,13 @@
 		"storage",
 		"contextMenus"
 	],
-    "host_permissions": [
-        "https://www.reddit.com/r/*/comments/*"
-    ]
+	"host_permissions": [
+		"https://www.reddit.com/r/*/comments/*/"
+	],
+	"content_scripts": [
+		{
+			"matches": [ "https://www.reddit.com/r/*/comments/*/" ],
+			"js": [ "js/foreground.js" ]
+		}
+	]
 }

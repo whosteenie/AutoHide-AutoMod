@@ -3,46 +3,60 @@ var contextMenuHide = {
     "id": "hide",
     "title": "Add to hidden",
 	"contexts": ["link"],
-	"documentUrlPatterns": ["https://www.reddit.com/r/*/comments/*/"]
+	"documentUrlPatterns": ["https://www.reddit.com/r/*/comments/*/"],
+	"targetUrlPatterns": ["https://www.reddit.com/user/*/"]
 };
 
 var contextMenuBlock = {
     "id": "block",
     "title": "Add to blocked",
 	"contexts": ["link"],
-	"documentUrlPatterns": ["https://www.reddit.com/r/*/comments/*/"]
+	"documentUrlPatterns": ["https://www.reddit.com/r/*/comments/*/"],
+	"targetUrlPatterns": ["https://www.reddit.com/user/*/"]
 };
 
-chrome.tabs.onActivated.addListener( (tab) => {
-    chrome.tabs.get(tab.tabId, (current_tab_info) => {
-        if(/^https:\/\/www\.reddit\.com\/r\/.*\/comments\/.*/.test(current_tab_info.url)) {
-			chrome.scripting.executeScript({ target: { tabId: tab.tabId }, files: ["js/foreground.js"] });
-		} else {
-			chrome.storage.sync.remove("onpage");
-        }
+chrome.tabs.onActivated.addListener( (activeInfo) => {
+    chrome.tabs.get(activeInfo.tabId, (tab) => {
+		if(!/^https:\/\/www\.reddit\.com\/r\/.*\/comments\/.*/.test(tab.url)) {
+			chrome.storage.sync.set({ "onpage": [] });
+		}
     });
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-	if(/^https:\/\/www\.reddit\.com\/r\/.*\/comments\/.*/.test(tab.url)) {
-		if(tab.status === "complete") {
-			chrome.scripting.executeScript({ target: { tabId: tabId }, files: ["js/foreground.js"] });
-		}
-	} else {
-		chrome.storage.sync.remove("onpage");
+	if(!/^https:\/\/www\.reddit\.com\/r\/.*\/comments\/.*/.test(tab.url)) {
+		chrome.storage.sync.set({ "onpage": [] });
 	}
 });
 
-// oninstall default settings
-
 chrome.contextMenus.onClicked.addListener(function (data, tab) {
+	let userData = data.linkUrl;
+	let statusData = data.menuItemId === "block";
+
 	const regexp = /^(?:https:\/\/)?(?:www\.)?(?:reddit\.com)?\/?\/?(?:(?:user|u)\/)?([\w-]{3,20})\/?$/;
-	if(regexp.test(data.linkUrl)) {
-		console.log(data.menuItemId);
-		console.log(data.linkUrl);
-	} else {
-		console.log("Not a user!");
-	}
+	userData = "/user/" + regexp.exec(userData)[1] + "/";
+
+	chrome.storage.sync.get("userlist", function (result) {
+		for(let i = 0; i < result.userlist.length; i++) {
+			let key = "user" + i;
+			if(userData.toUpperCase() === result.userlist[i][key].user.toUpperCase()) {
+				console.log("Unable to add duplicate user");
+				return;
+			}
+		}
+
+		let updatedList = result.userlist;
+
+		let key = "user" + updatedList.length;
+		let user = { "status": statusData, "user": userData};
+		let newEntry = { [key]: user };
+
+		updatedList.push(newEntry);
+
+		chrome.storage.sync.set({ "userlist": updatedList });
+
+		chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["js/foreground.js"] });
+	});
 });
 
 chrome.runtime.onInstalled.addListener(function (installData) {
@@ -51,9 +65,19 @@ chrome.runtime.onInstalled.addListener(function (installData) {
 
 	chrome.storage.sync.set({ "active": true });
 	chrome.storage.sync.set({ "userlist": [] });
+	chrome.storage.sync.set({ "onpage": [] });
 	chrome.storage.sync.set({ "saved": false });
-	chrome.storage.sync.set({ "themeIndex": 0 });
-	chrome.storage.sync.set({ "style": "theme-light" });
-	chrome.storage.sync.set({ "stickyIndex": 0 });
-	chrome.storage.sync.set({ "sticky": "unblocked" });
+
+	chrome.storage.sync.set({
+		"settings": {
+			"ruleIndex": 0,
+			"rule": "false",
+			"stickyIndex": 0,
+			"sticky": "unblocked",
+			"autosaveIndex": 0,
+			"autosave": "false",
+			"themeIndex": 0,
+			"theme": "theme-light",
+		}
+	});
 });

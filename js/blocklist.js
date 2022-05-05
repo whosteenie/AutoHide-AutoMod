@@ -18,7 +18,6 @@ const warning = document.getElementById("warning");
 let checks = document.getElementsByClassName("select");
 let toggles = document.querySelectorAll("input.toggle");
 let groupSelect = document.getElementById("select-all");
-let currSort = "time";
 
 document.addEventListener('keydown', e => {
     if(e.ctrlKey && e.key === 's') {
@@ -43,7 +42,7 @@ document.getElementById("head-check").addEventListener("click", sortTable);
 document.getElementById("head-user").addEventListener("click", sortTable);
 document.getElementById("head-status").addEventListener("click", sortTable);
 
-loadSettings();
+loadSettings(false);
 addInputs();
 hideElements();
 
@@ -107,18 +106,19 @@ function addBlock(userName) {
 	// TODO: this line takes about 1ms to run
 	tablebody.innerHTML += template;
 
-    blockRule.value = "";
-    filter.value = "";
-    filterList();
 	addInputs();
-	hideElements();
-	loadStyles();
-
     for(let i = 0; i < toggles.length; i++) {
         toggles[i].checked = statuses[i];
     }
 
-    toggles[toggles.length - 1].checked = groupStatus.checked;
+	toggles[toggles.length - 1].checked = groupStatus.checked;
+
+    blockRule.value = "";
+    filter.value = "";
+	filterList();
+	updateSelect();
+	hideElements();
+	loadSettings(true);
 }
 
 // TODO: this is required because adding a row as a template string
@@ -138,6 +138,7 @@ function addInputs() {
 	toggles = document.querySelectorAll("input.toggle");
 	for(const toggle of toggles) {
 		toggle.addEventListener("keydown", (e) => { if(e.code === "Enter") { toggle.click(); } });
+		toggle.addEventListener("click", updateSelect);
 	}
 }
 
@@ -172,7 +173,6 @@ function removeBlock() {
     groupSelect.checked = false;
 }
 
-// TODO: select-all on a filtered list will select hidden entries
 function filterList() {
     let input = filter.value.trim().toUpperCase();
 
@@ -188,21 +188,21 @@ function filterList() {
 }
 
 function sortTable() {
-	let n = null;
+	let sortBy = null;
 
 	if(this.id === "head-check") {
-		n = 0;
+		sortBy = 0;
 	} else if(this.id === "head-user") {
-		n = 1;
+		sortBy = 1;
 	} else {
-		n = 2;
+		sortBy = 2;
 	}
 
-	var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+	var table, rows, switching, i, xCell, yCell, shouldSwitch, direction, switchCount = 0;
 	table = document.getElementById("blocklist");
 	switching = true;
 
-	dir = "asc";
+	direction = "asc";
 
 	while(switching) {
 		switching = false;
@@ -211,29 +211,29 @@ function sortTable() {
 		for(i = 1; i < (rows.length - 1); i++) {
 			shouldSwitch = false;
 
-			x = rows[i].getElementsByTagName("td")[n];
-			y = rows[i + 1].getElementsByTagName("td")[n];
+			xCell = rows[i].getElementsByTagName("td")[sortBy];
+			yCell = rows[i + 1].getElementsByTagName("td")[sortBy];
 
-			if(n === 0 || n === 2) {
-				if(dir === "asc") {
-					if(x.getElementsByTagName("input")[0].checked > y.getElementsByTagName("input")[0].checked) {
+			if(sortBy === 0 || sortBy === 2) {
+				if(direction === "asc") {
+					if(xCell.getElementsByTagName("input")[0].checked > yCell.getElementsByTagName("input")[0].checked) {
 						shouldSwitch = true;
 						break;
 					}
-				} else if(dir === "desc") {
-					if(x.getElementsByTagName("input")[0].checked < y.getElementsByTagName("input")[0].checked) {
+				} else if(direction === "desc") {
+					if(xCell.getElementsByTagName("input")[0].checked < yCell.getElementsByTagName("input")[0].checked) {
 						shouldSwitch = true;
 						break;
 					}
 				}
 			} else {
-				if(dir === "asc") {
-					if(x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+				if(direction === "asc") {
+					if(xCell.innerHTML.toLowerCase() > yCell.innerHTML.toLowerCase()) {
 						shouldSwitch = true;
 						break;
 					}
-				} else if(dir === "desc") {
-					if(x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+				} else if(direction === "desc") {
+					if(xCell.innerHTML.toLowerCase() < yCell.innerHTML.toLowerCase()) {
 						shouldSwitch = true;
 						break;
 					}
@@ -244,10 +244,10 @@ function sortTable() {
 			rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
 			switching = true;
 
-			switchcount++;
+			switchCount++;
 		} else {
-			if(switchcount === 0 && dir === "asc") {
-				dir = "desc";
+			if(switchCount === 0 && direction === "asc") {
+				direction = "desc";
 				switching = true;
 			}
 		}
@@ -283,7 +283,6 @@ function selectAll() {
     updateSelect();
 }
 
-// TODO: checking selected toggles doesn't sync up groupStatus
 function updateSelect() {
     let hasTrue = false;
     let hasFalse = false;
@@ -316,34 +315,33 @@ function updateSelect() {
     }
 }
 
-function loadStyles() {
-	chrome.storage.sync.get("theme", function (result) {
-		body.classList.add(result.theme);
-		topMenu.classList.add(result.theme);
-		content.classList.add(result.theme);
-		title.classList.add(result.theme);
-		headers.classList.add(result.theme);
+function loadSettings(styles) {
+	chrome.storage.sync.get("settings", function (result) {
+		let settings = result.settings;
+
+		if(!styles) {
+			groupStatus.checked = (settings.rule === "true");
+			body.classList.add(settings.theme);
+			topMenu.classList.add(settings.theme);
+			content.classList.add(settings.theme);
+			title.classList.add(settings.theme);
+			headers.classList.add(settings.theme);
+
+			chrome.storage.sync.get("userlist", function (result) {
+				console.log(result.userlist);
+
+				for(let i = 0; i < result.userlist.length; i++) {
+					let key = "user" + i;
+					addBlock(result.userlist[i][key].user, true);
+					toggles[i].checked = result.userlist[i][key].status;
+				}
+			});
+		}
 
 		for(const row of rows) {
-			row.classList.add(result.theme);
+			row.classList.add(settings.theme);
 		}
 	});
-}
-
-function loadSettings() {
-	chrome.storage.sync.get("userlist", function (result) {
-		for(let i = 0; i < result.userlist.length; i++) {
-			let key = "user" + i;
-			addBlock(result.userlist[i][key].user)
-			toggles[i].checked = result.userlist[i][key].status;
-		}
-	});
-
-	chrome.storage.sync.get("rule", function (result) {
-		groupStatus.checked = (result.rule === "true");
-	});
-
-	loadStyles();
 }
 
 function saveSettings() {
@@ -362,16 +360,13 @@ function saveSettings() {
 		blocklist.push({ [key]: data });
 	}
 
-	let list = { ["userlist"]: blocklist };
-	chrome.storage.sync.set(list);
+	chrome.storage.sync.set({ "userlist": blocklist });
 
     warning.style.color = "green";
     warning.innerText = "Saved settings";
 }
 
 function hideElements() {
-	let statusImages = document.getElementsByClassName("status");
-
 	if(window.innerWidth < 1000) {
 		content.classList.add("fixed");
 	} else {
@@ -383,6 +378,7 @@ function hideElements() {
 		title.classList.remove("hidden");
 	}
 
+	let statusImages = document.getElementsByClassName("status");
 	let statusHead = document.getElementById("head-status");
 
 	for(const image of statusImages) {

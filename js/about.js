@@ -12,13 +12,15 @@ loadSettings();
 hideElements();
 
 function loadSettings() {
-	chrome.storage.sync.get("theme", function (result) {
-		body.classList.add(result.theme);
-		topMenu.classList.add(result.theme);
-		content.classList.add(result.theme);
-		title.classList.add(result.theme);
+	chrome.storage.sync.get("settings", function (result) {
+		let settings = result.settings;
 
-		if(result.theme === "theme-dark") {
+		body.classList.add(settings.theme);
+		topMenu.classList.add(settings.theme);
+		content.classList.add(settings.theme);
+		title.classList.add(settings.theme);
+
+		if(settings.theme === "theme-dark") {
 			document.getElementById("github").src = "/img/github_light.svg";
 		} else {
 			document.getElementById("github").src = "/img/github_dark.svg";
@@ -27,8 +29,6 @@ function loadSettings() {
 }
 
 function hideElements() {
-	let statusImages = document.getElementsByClassName("status");
-
 	if(window.innerWidth < 1000) {
 		content.classList.add("fixed");
 	} else {
@@ -38,21 +38,5 @@ function hideElements() {
 		title.classList.add("hidden");
 	} else {
 		title.classList.remove("hidden");
-	}
-
-	let statusHead = document.getElementById("head-status");
-
-	for(const image of statusImages) {
-		if(window.innerWidth < 650) {
-			image.classList.add("hidden");
-			table.style.width = "480px";
-			statusHead.style.width = "100px";
-			statusHead.innerHTML = "Status";
-		} else {
-			image.classList.remove("hidden");
-			table.removeAttribute("style");
-			statusHead.removeAttribute("style");
-			statusHead.innerHTML = "Status: Hidden / Blocked";
-		}
 	}
 }

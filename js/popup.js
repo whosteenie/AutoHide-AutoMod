@@ -1,11 +1,12 @@
 ﻿
 const html = document.getElementById("popup-html");
 const topMenu = document.getElementById("popup-top-menu");
+const table = document.getElementById("blocklist");
+const body = table.getElementsByTagName("tbody")[0];
 
-var isActivated;
-const images = document.getElementsByClassName("icon");
 const enabled = document.getElementById("enabled");
 const disabled = document.getElementById("disabled");
+let isActivated = true;
 
 document.getElementById("activate").addEventListener("click", toggleActivate);
 document.getElementById("options").addEventListener("click", openOptions);
@@ -20,7 +21,6 @@ function toggleActivate() {
     chrome.storage.sync.set({ "active": isActivated });
 }
 
-// TODO: toggle image on hover and add press animation
 function toggleImages() {
     if(isActivated) {
         enabled.classList?.remove("hidden");
@@ -35,42 +35,64 @@ function openOptions() {
     window.open("/blocklist.html");
 }
 
-function loadSettings() {
-    chrome.storage.sync.get("active", function (result) {
-        isActivated = result.active;
-
-        toggleImages();
-	});
-
+function detectBlocks() {
 	chrome.storage.sync.get("onpage", function (result) {
-		if(result.onpage === undefined) {
-			console.log("No users on this page!");
-			return;
-		}
+		chrome.tabs.query({ active: true, lastFocusedWindow: true }, tabs => {
+			let url = tabs[0].url;
 
-		for(let i = 0; i < result.onpage.length; i++) {
-			console.log(result.onpage);
 			let status = "";
-			if(result.onpage[i].status) {
-				status = "img/blocked.svg";
-			} else {
-				status = "img/expand.svg";
-			}
+			let display = "";
 
-			let table = document.getElementById("blocklist");
-			let template = `
-                <tr>
-					<td><img src=${status} alt="•" class="popup-status"></td>
-					<td>${result.onpage[i].user}</td>
-				</tr>
+			for(let i = -1; i < result.onpage.length; i++) {
+				if(result.onpage.length === 0) {
+					let correctUrl = /^https:\/\/www\.reddit\.com\/.*$/.test(url);
+
+					if(!correctUrl) {
+						display = "Not on Reddit!";
+					} else {
+						display = "No users on this page!";
+					}
+
+					status = "img/warning.png";
+				} else if(i > -1) {
+					if(result.onpage[i].status) {
+						status = "img/blocked.svg";
+					} else {
+						status = "img/expand.svg";
+					}
+
+					display = result.onpage[i].user;
+				} else {
+					continue;
+				}
+
+				let template = `
+					<tr>
+						<td><img src=${status} alt="•" class="popup-status"></td>
+						<td>${display}</td>
+					</tr>
                     `;
 
-			table.innerHTML += template;
-		}
+				body.innerHTML += template;
+			}
+		});
+	});
+}
+
+
+function loadSettings() {
+	chrome.storage.sync.get("active", function (result) {
+		isActivated = result.active;
+
+		toggleImages();
 	});
 
-	chrome.storage.sync.get("theme", function (result) {
-		html.classList.add(result.theme);
-		topMenu.classList.add(result.theme);
+	detectBlocks();
+
+	chrome.storage.sync.get("settings", function (result) {
+		let settings = result.settings;
+
+		html.classList.add(settings.theme);
+		topMenu.classList.add(settings.theme);
 	});
 }

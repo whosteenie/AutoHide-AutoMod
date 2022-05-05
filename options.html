@@ -8,8 +8,8 @@
     <script defer src="js/options.js"></script>
     <link rel="stylesheet" type="text/css" href="css/stylesheet.css">
 </head>
-<body class="style-light">
-    <div class="style-light" id="top-menu">
+<body>
+    <div id="top-menu">
 		<div id="title">
 			<img src="img/autohide_automod.svg" alt="AHAM" id="logo">
 			<h1>AutoHide AutoMod</h1>
@@ -20,8 +20,8 @@
 			<a href="/about.html" class="page">About</a>
 		</div>
     </div>
-	<div light="style-light" id="content">
-		<p id="description">Dang, even more options?!</p>
+	<div id="content">
+		<h2 id="description">Extension Options</h2>
 		<div id="options-list">
 			<span class="options-entry">
 				<label class="options-label">Default Rule:</label>
@@ -31,11 +31,18 @@
 				</select>
 			</span>
 			<span class="options-entry">
-				<label class="options-label">Stickied:</label>
+				<label class="options-label">Stickied Rule:</label>
 				<select class="options-select" id="sticky">
 					<option class="sticky-options" value="unblocked">Unblocked</option>
 					<option class="sticky-options" value="false">Hidden</option>
 					<option class="sticky-options" value="true">Blocked</option>
+				</select>
+			</span>
+			<span class="options-entry">
+				<label class="options-label">Autosave:</label>
+				<select class="options-select" id="autosave">
+					<option class="autosave-options" value="false">Disabled</option>
+					<option class="autosave-options" value="true">Enabled</option>
 				</select>
 			</span>
 			<span class="options-entry">

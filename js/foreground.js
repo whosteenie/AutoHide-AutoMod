@@ -1,127 +1,105 @@
 
+var blockIndex = null;
 var pageBlocked = [];
 
-var comments = document.getElementsByClassName("_1YCqQVO-9r-Up6QPB9H6_4 _1YCqQVO-9r-Up6QPB9H6_4");
-var commentsList = comments[0]?.children;
+var stickyClass = "_2ETuFsVzMBxiHia6HfJCTQ _2wd-K5Djdc9TGPRGDgmkpX";
+var comments = document.getElementsByClassName("_1YCqQVO-9r-Up6QPB9H6_4 _1YCqQVO-9r-Up6QPB9H6_4")[0];
+var commentsList = comments?.children;
 
 chrome.storage.sync.get("active", function (result) {
-    if(result.active) {
+	if(result.active) {
 		loadSettings();
 	}
 });
 
 function loadSettings() {
-	chrome.storage.sync.get(["userlist"], function (result) {
-		blockUsers(null, null, result.userlist);
-
-		for(let i = 0; i < result.userlist.length; i++) {
-			let key = "user" + i;
-			let user = result.userlist[i][key].user;
-			let status = result.userlist[i][key].status;
-
-			blockUsers(user, status, result.userlist);
-		}
+	chrome.storage.sync.get("userlist", function (result) {
+		userBlock(result.userlist, true);
+		userBlock(result.userlist, false);
 	});
 }
 
-function blockUsers(user, status, userlist) {
-	let users = [];
-	for(let i = 0; i < userlist.length; i++) {
-		let key = "user" + i;
-		users.push(userlist[i][key].user);
-	}
+function userBlock(userlist, stickies) {
+	chrome.storage.sync.get("settings", function (result) {
+		// should you hide or block stickies, or neither
+		let settings = result.settings;
+		let stickyStatus = null;
+		if(settings.sticky !== "unblocked") {
+			stickyStatus = (settings.sticky === "true");
+		}
 
-	chrome.storage.sync.get("sticky", function (result) {
+		// go through all the comments on the page
 		for(let i = 0; i < commentsList.length; i++) {
+			// create a list of raw blocked usernames
+			let users = [];
+			for(let i = 0; i < userlist.length; i++) {
+				let key = "user" + i;
+				users.push(userlist[i][key].user);
+			}
+
+			// is there overlap between blocklist and sticky rule?
 			let userElement = commentsList[i].querySelector("[data-testid='comment_author_link']");
 			let currName = userElement?.getAttribute("href");
-			let isDuplicate = users.includes(currName);
-			let stickyStatus = (result.sticky === "true");
+			if(userElement === null || currName === null) {
+				continue;
+			}
 
-			if(isHidden(commentsList[i], user, result.sticky)) {
+			let isDuplicate = users.includes(currName);
+
+			// should you hide this user?
+			if(isHidden(users, commentsList[i], stickyStatus)) {
+				// get the status of this successful block
+				let key = "user" + blockIndex;
+				let status = userlist[blockIndex][key].status;
+
+				// block or hide for blocklist and stickies
 				if(status || (stickyStatus && !isDuplicate)) {
 					commentsList[i].style.display = "none";
 				} else {
 					commentsList[i].removeAttribute("style");
 				}
 
-				if(user === null && !isDuplicate) {
+				// add to popup list for blocklist and stickies
+				if(stickies && !isDuplicate) {
 					let entry = { "user": currName, "status": stickyStatus };
 					pageBlocked.push(entry);
-				} else if(user !== null) {
-					let entry = { "user": user, "status": status };
+				} else if(!stickies) {
+					let entry = { "user": currName, "status": status };
 					pageBlocked.push(entry);
 				}
 			}
+
+			// if you've blocked as many people as are on the blocklist, then stop searching
+			if(pageBlocked.length >= userlist.length) {
+				break;
+			}
 		}
 
-		chrome.storage.sync.set({ ["onpage"]: pageBlocked });
+		// update popup list
+		chrome.storage.sync.set({ "onpage": pageBlocked });
 	});
 }
 
-function isHidden(comment, user, sticky) {
-
+function isHidden(users, comment, sticky) {
 	let userElement = comment.querySelector("[data-testid='comment_author_link']");
-	let currName = userElement?.getAttribute("href");
-	if(userElement === null || currName === null) {
-		return false;
-	}
-	let shouldHide = user === currName;
+	let currName = userElement.getAttribute("href");
 
-	let stickyClass = "_2ETuFsVzMBxiHia6HfJCTQ _2wd-K5Djdc9TGPRGDgmkpX"
+	let shouldHide = users.includes(currName);
+
 	let isStickied = comment.querySelector("[class='" + stickyClass + "' i]") !== null;
-	let hideSticky = sticky === "false" || sticky === "true";
+	let hideSticky = sticky;
 
-	if(shouldHide || (isStickied && hideSticky && user === null)) {
-		let threadContainer = comment.getElementsByClassName("_1DooEIX-1Nj5rweIc5cw_E")[0];
-		threadContainer.getElementsByClassName("_3Wv3am0TXfTcugZJ6niui")[0]?.remove();
+	if(shouldHide || (isStickied && hideSticky)) {
+		blockIndex = users.indexOf(currName);
 
-		let expandContainer = comment.getElementsByClassName("_1nGapmdexvR0BuOkfAi6wa")[0];
-		expandContainer.classList?.remove("_1zN1-lYh2LfbYOMAho_O8g");
-		expandContainer.classList.add("O_Ica0k2O4KFcZyNfsJDU");
+		let level = comment.getElementsByClassName("_1RIl585IYPW6cmNXwgRz0J")[0].innerHTML;
+		level = parseInt(level.replace(/^\D+/g, ""), 10) - 1;
 
-		comment.getElementsByClassName("_3cjCphgls6DH-irkVaA0GM")[0]?.remove();
-		comment.getElementsByClassName("_3KgrO85L1p9wQbgwG27q4y")[0]?.remove();
-
-		comment.getElementsByClassName("_1z5rdmX8TDr6mqwNv7A70U")[0].classList.add("hovered");
-
-		comment.getElementsByClassName("_3tw__eCCe7j-epNCKGXUKk")[0].classList.add("undefined");
+		let threadlines = comment.querySelectorAll(".threadline");
+		threadlines[level]?.click();
 
 		return true;
 	}
 
 	return false;
 }
-
-
-
-// This old way of hiding a comment makes more sense
-// and is less error prone, but it causes an automatic
-// scrolling to the hidden comment every time the
-// page is loaded.
-
-//function isHiddenOld(comment, user, sticky) {
-
-//	let userElement = comment.querySelector("[data-testid='comment_author_link']");
-//	let currName = userElement?.getAttribute("href");
-//	if(userElement === null || currName === null) {
-//		return false;
-//	}
-//	let shouldHide = user === currName;
-
-//	let stickyClass = "_2ETuFsVzMBxiHia6HfJCTQ _2wd-K5Djdc9TGPRGDgmkpX"
-//	let isStickied = comment.querySelector("[class='" + stickyClass + "' i]") !== null;
-//	let hideSticky = sticky === "false" || sticky === "true";
-
-//	if(shouldHide || (isStickied && hideSticky && user === null)) {
-//		let level = comment.getElementsByClassName("_1RIl585IYPW6cmNXwgRz0J")[0].innerHTML;
-//		level = parseInt(level.replace(/^\D+/g, ""), 10) - 1;
-
-//		let threadlines = comment.querySelectorAll(".threadline");
-//		threadlines[level]?.click();
-
-//		return true;
-//	}
-
-//	return false;
-//}

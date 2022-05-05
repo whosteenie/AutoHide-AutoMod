@@ -219,7 +219,7 @@ table, #content, #top-menu {
     border-radius: 50%;
 	/* #FFFFFF */
 	background: linear-gradient(225deg, #ffffff, #e6e6e6);
-	box-shadow: 5px 0 4px 0 #00000027, 6px 0px 19px 0 #00000024;
+	box-shadow: 5px 0 4px 0 #00000027, 6px 0 19px 0 #00000024;
 }
 
 /* slider outer oval checked color */
@@ -231,7 +231,7 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(26px);
 	background: linear-gradient(45deg, #ffffff, #e6e6e6);
-	box-shadow: -5px 0 4px 0 #00000027, -6px 0px 19px 0 #00000024;
+	box-shadow: -5px 0 4px 0 #00000027, -6px 0 19px 0 #00000024;
 }
 
 /* <----------------- Slider button -----------------> */
@@ -246,7 +246,7 @@ input:checked + .slider:before {
 
 .options-label {
 	font-size: 20px;
-	text-align: center;
+	margin-right: 20px;
 }
 
 .options-select {
@@ -261,6 +261,19 @@ input:checked + .slider:before {
 #options-list {
 	display: flex;
 	flex-flow: column;
+	text-align: start;
+}
+
+#sticky {
+	margin-left: -4px;
+}
+
+#theme {
+	margin-left: 48px;
+}
+
+#autosave {
+	margin-left: 27px;
 }
 
 /* <----------------------------- options end -----------------------------> */
